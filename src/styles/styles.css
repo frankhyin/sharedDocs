@@ -1,0 +1,29 @@
+.DraftEditor-root {
+  border: solid 1px black;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#title {
+  text-align: center;
+  margin: 10px;
+}
+
+#toolbar {
+  margin: 5px 5px 0px 5px;
+}
+
+.toolbar-btn {
+  height: 30px;
+  width: 30px;
+}
+
+.align-right {
+  text-align: right;
+}
+.align-center {
+  text-align: center;
+}
+.align-left {
+  text-align: left;
+}
