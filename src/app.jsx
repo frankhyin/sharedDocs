@@ -1,11 +1,11 @@
 import React from 'react';
-// import TextEditor from './components/Editor';
-import Login from './components/login';
+// import Login from './components/login';
+import Register from './components/register'
 
 export default class App extends React.Component {
   render() {
     return (<div>
-      <Login />
+      <Register />
     </div>);
   }
 }
