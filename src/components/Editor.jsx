@@ -1,53 +1,55 @@
 import React from 'react';
-import { Editor, EditorState, RichUtils } from 'draft-js';
-import { RIEInput } from 'riek';
-// import createStyles from 'draft-js-custom-styles';
+import { Editor, EditorState, RichUtils, StyleButton } from 'draft-js';
+import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
+import InlineEdit from 'react-edit-inline';
+import createStyles from 'draft-js-custom-styles';
+const { styles, customStyleFn, exporter } = createStyles(['font-size', 'color'], 'PREFIX')
 
 class TextEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
-      textAlignment: "left",
-      title: 'New Document',
+      textAlignment: 'left',
+      title: 'Untitled',
     };
     this.onChange = (editorState) => {
       this.setState({ editorState });
     };
-    this.handleKeyCommand = this.handleKeyCommand.bind(this);
-    // this.toggleColor = color => this._toggleColor.(color);
+    this.titleChange = this.titleChange.bind(this)
   }
 
-  handleKeyCommand(command, editorState) {
-    const newState = RichUtils.handleKeyCommand(editorState, command);
-    if (newState) {
-      this.onChange(newState);
-      return 'Handled';
-    }
-    return 'Not handled';
+  titleChange(input) {
+    const newTitle = input[this.state.title]
+    this.setState({title: newTitle})
   }
 
   // _toggleColor(color) {
-  //   const state = this.state
-  //   const selection = state.getSelection();
+  //   const {editorState} = this.state;
+  //   const selection = editorState.getSelection();
   //
   //   const nextContentState = Object.keys(colorStyleMap).reduce((contentState, color) => {
   //     return Modifier.removeInlineStyle(contentState, selection, color)
-  //   }, state.getCurrentContent());
-  //
-  //   let nextEditorState = EditorState.push(state, nextContentState, 'change-inline-style');
+  //   }, editorState.getCurrentContent());
+  //   let nextEditorState = EditorState.push(
+  //     editorState,
+  //     nextContentState,
+  //     'change-inline-style'
+  //   );
   //   const currentStyle = editorState.getCurrentInlineStyle();
-  //
+  //   // Unset style override for current color.
   //   if (selection.isCollapsed()) {
   //     nextEditorState = currentStyle.reduce((state, color) => {
   //       return RichUtils.toggleInlineStyle(state, color);
   //     }, nextEditorState);
   //   }
-  //
+  //   // If the color is being toggled on, apply it.
   //   if (!currentStyle.has(color)) {
-  //     nextEditorState = RichUtils.toggleInlineStyle(nextEditorState, color);
+  //     nextEditorState = RichUtils.toggleInlineStyle(
+  //       nextEditorState,
+  //       color
+  //     );
   //   }
-  //
   //   this.onChange(nextEditorState);
   // }
 
@@ -81,13 +83,24 @@ class TextEditor extends React.Component {
     this.setState({textAlignment: "center"})
   }
 
+  bulletPoints() {
+    this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'unordered-list-item'))
+  }
+
+  numberedList() {
+    this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'ordered-list-item'))
+  }
+
   render() {
     return (
       <div>
-        <h2
-          id='title'
-          // onMouseDown={ (e) => {this._editTitle(e)} }
-          >{this.state.title}</h2>
+        <h2 id='title'>
+          <InlineEdit
+            text={this.state.title}
+            paramName={this.state.title}
+            change={this.titleChange}
+          />
+        </h2>
         <div id='toolbar'>
           <button
             onMouseDown={ (e) => {this._onBoldClick(e)} }
@@ -119,8 +132,47 @@ class TextEditor extends React.Component {
             className="toolbar-btn">
             <strong>R</strong>
           </button>
+          <DropdownButton
+            bsSize="xs"
+            title="Font Size"
+            className="dropdown-btn"
+            id="font-size"
+          >
+            {fontSizes.map((size) => {
+              return <MenuItem
+                  eventKey={size}
+                >
+                  {size}
+                </MenuItem>
+            })}
+          </DropdownButton>
+          <DropdownButton
+            bsSize="xs"
+            title="Font Color"
+            className="dropdown-btn"
+            id="font-color"
+          >
+            {colors.map((color) => {
+              return <MenuItem eventKey={color.style}>{color.label}</MenuItem>
+            })}
+          </DropdownButton>
+          <button
+            onMouseDown={ () => {this.bulletPoints()} }
+            className="toolbar-btn">
+            <strong>*</strong>
+          </button>
+          <button
+            onMouseDown={ () => {this.numberedList()} }
+            className="toolbar-btn">
+            <strong>1</strong>
+          </button>
         </div>
+        {/* <ColorControls
+          editorState={this.state.editorState}
+          onToggle={this.toggleColor}
+        /> */}
         <Editor
+          customStyleMap={colorStyleMap}
           editorState={this.state.editorState}
           onChange={this.onChange}
           textAlignment={this.state.textAlignment}
@@ -130,15 +182,46 @@ class TextEditor extends React.Component {
   }
 }
 
+// const ColorControls = (props) => {
+//   const currentStyle = props.editorState.getCurrentInlineStyle();
+//   return (
+//     <div style={styles.controls}>
+//       {COLORS.map(type =>
+//         <StyleButton
+//           active={currentStyle.has(type.style)}
+//           label={type.label}
+//           onToggle={props.onToggle}
+//           style={type.style}
+//         />
+//       )}
+//     </div>
+//   );
+// };
+
+const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 48, 72];
+
+const colors = [
+  {label: 'Black', style: 'black'},
+  {label: 'White', style: 'white'},
+  {label: 'Gray', style: 'gray'},
+  {label: 'Red', style: 'red'},
+  {label: 'Orange', style: 'orange'},
+  {label: 'Yellow', style: 'yellow'},
+  {label: 'Green', style: 'green'},
+  {label: 'Blue', style: 'blue'},
+  {label: 'Indigo', style: 'indigo'},
+  {label: 'Violet', style: 'violet'},
+];
+
 const colorStyleMap = {
   black: {
-    color: 'rgba(0, 0, 0, 1.0)'
+    color: 'rgba(0, 0, 0, 1.0)',
   },
   white: {
-    color: 'rgba(255, 255, 255, 1.0)'
+    color: 'rgba(255, 255, 255, 1.0)',
   },
   gray: {
-    color: 'rgba(128, 128, 128, 1.0)'
+    color: 'rgba(128, 128, 128, 1.0)',
   },
   red: {
     color: 'rgba(255, 0, 0, 1.0)',

@@ -1,5 +1,4 @@
 .DraftEditor-root {
-  border: solid 1px black;
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -10,12 +9,18 @@
 }
 
 #toolbar {
-  margin: 5px 5px 0px 5px;
+  margin: 5px;
+  padding: 5px;
+  background-color: gray;
+  display: flex;
+  border: solid 1px black;
 }
 
 .toolbar-btn {
   height: 30px;
   width: 30px;
+  border: solid 1px black;
+  border-radius: 3px;
 }
 
 .align-right {
@@ -26,4 +31,15 @@
 }
 .align-left {
   text-align: left;
+}
+
+.dropdown-btn {
+  height: 30px;
+  width: 90px;
+  border: solid 1px black;
+  background-color: buttonface;
+}
+
+.hide {
+  display: none;
 }

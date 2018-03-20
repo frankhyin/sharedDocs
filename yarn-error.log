@@ -8091,4 +8091,4 @@ Lockfile:
       readable-stream "~1.0.26"
 
 Trace: 
-  Error: EPERM: operation not permitted, lstat 'C:\Users\Matthew\horizons\sharedDocs\node_modules\electron-prebuilt-compile\node_modules'
+  Error: EBUSY: resource busy or locked, unlink 'C:\Users\Matthew\horizons\sharedDocs\node_modules\electron\dist\blink_image_resources_200_percent.pak'
