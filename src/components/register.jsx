@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 
 class Register extends React.Component {
   constructor(props) {
@@ -39,7 +40,7 @@ class Register extends React.Component {
         success = false;
     }
 
-    if (!this.state.password2) {
+    if (!this.state.password2Input) {
         this.setState({password2Error: "Please verify your password"});
         success = false;
     }
@@ -50,6 +51,8 @@ class Register extends React.Component {
     }
     if (success) {
         alert("Registered!");
+
+      this.props.history.push('/login');
     }
   }
 
@@ -97,7 +100,7 @@ class Register extends React.Component {
               type="text"
               placeholder="Display name"
               onChange={(e) => this.handleDisplayNameChange(e)}
-              value={this.state.emailInput}
+              value={this.state.displayNameInput}
             />
             <span>{this.state.displayNameError}</span>
         </div>
@@ -130,4 +133,4 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+export default withRouter(Register);
