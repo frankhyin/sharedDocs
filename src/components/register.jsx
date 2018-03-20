@@ -50,9 +50,26 @@ class Register extends React.Component {
         success = false;
     }
     if (success) {
-        alert("Registered!");
-
-      this.props.history.push('/login');
+        fetch('http://localhost:3000/register', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              email: this.state.emailInput,
+              displayName: this.state.displayNameInput,
+              password: this.state.passwordInput,
+              password2: this.state.password2Input
+          })
+        })
+        .then(res => res.json())
+        .then((result) => {
+            this.props.history.push('/login');
+        })
+        .catch((error) => {
+            console.log("Error: ", error)
+        })
     }
   }
 

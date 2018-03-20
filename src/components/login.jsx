@@ -28,7 +28,26 @@ class Login extends React.Component {
         success = false;
     }
     if (success) {
-    alert("Logged In!");
+        fetch('http://localhost:3000/login', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              email: this.state.emailInput,
+              password: this.state.passwordInput
+          })
+        })
+        .then(res => res.json())
+        .then((result) => {
+            // this.props.history.push('/login');
+            console.log(result);
+            alert("Success!");
+        })
+        .catch((error) => {
+            console.log("Error: ", error)
+        })
     }
   }
 
