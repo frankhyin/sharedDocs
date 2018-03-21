@@ -2283,6 +2283,10 @@ draft-js@^0.10.5:
     immutable "~3.7.4"
     object-assign "^4.1.0"
 
+draftjs-utils@^0.9.3:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/draftjs-utils/-/draftjs-utils-0.9.3.tgz#781254908beb7ca9eff6da63bc7d964ddd03ec22"
+
 ds-store@^0.1.5:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/ds-store/-/ds-store-0.1.6.tgz#d1024ef746ed0c13f0f7fec85c7e858e8c4b7ca7"
@@ -3939,6 +3943,10 @@ html-comment-regex@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/html-comment-regex/-/html-comment-regex-1.1.1.tgz#668b93776eaae55ebde8f3ad464b307a4963625e"
 
+html-to-draftjs@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/html-to-draftjs/-/html-to-draftjs-1.3.0.tgz#9de3de81d8ff801f167ef34a6b93cbd7a9c2f85c"
+
 htmlparser2@~3.8.1:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.8.3.tgz#996c28b191516a8be86501a7d79757e5c70c1068"
@@ -4725,6 +4733,12 @@ levn@^0.3.0, levn@~0.3.0:
   dependencies:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
+
+linkify-it@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-2.0.3.tgz#d94a4648f9b1c179d64fa97291268bdb6ce9434f"
+  dependencies:
+    uc.micro "^1.0.1"
 
 load-json-file@^1.0.0:
   version "1.1.0"
@@ -6165,6 +6179,16 @@ react-dom@^15.4.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
+react-draft-wysiwyg@^1.12.11:
+  version "1.12.11"
+  resolved "https://registry.yarnpkg.com/react-draft-wysiwyg/-/react-draft-wysiwyg-1.12.11.tgz#6d7b827ff4473410b037c8f9c90980fe2e839c97"
+  dependencies:
+    classnames "^2.2.5"
+    draftjs-utils "^0.9.3"
+    html-to-draftjs "^1.3.0"
+    linkify-it "^2.0.3"
+    prop-types "^15.6.0"
+
 react-edit-inline@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/react-edit-inline/-/react-edit-inline-1.0.8.tgz#d144670b5217b5adc6c5bcb6976fc6b257f09b72"
@@ -7527,6 +7551,10 @@ typescript@>=1.6:
 ua-parser-js@^0.7.9:
   version "0.7.17"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.17.tgz#e9ec5f9498b9ec910e7ae3ac626a805c4d09ecac"
+
+uc.micro@^1.0.1:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.5.tgz#0c65f15f815aa08b560a61ce8b4db7ffc3f45376"
 
 uglify-js@^2.4.19, uglify-js@^2.6:
   version "2.8.29"
