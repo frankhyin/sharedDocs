@@ -46,9 +46,7 @@ class Login extends React.Component {
         })
         .then(res => res.json())
         .then((result) => {
-            // this.props.history.push('/login');
-            console.log(result);
-            alert("Success!");
+            this.props.history.push('/home');
         })
         .catch((error) => {
             console.log("Error: ", error)
@@ -85,7 +83,7 @@ class Login extends React.Component {
                                hintText="Enter your Email address"
                                floatingLabelText="Email"
                                onChange={(e) => this.handleEmailChange(e)}
-                               value={this.state.displayNameInput}
+                               value={this.state.emailInput}
                                errorText={this.state.emailError}
                            />
                           <br/>
@@ -93,7 +91,7 @@ class Login extends React.Component {
 
                       <div>
                           <TextField
-                               hintText="Enter a Password"
+                               hintText="Enter your Password"
                                floatingLabelText="Password"
                                onChange={(e) => this.handlePasswordChange(e)}
                                value={this.state.passwordInput}
@@ -104,7 +102,7 @@ class Login extends React.Component {
                       <br/>
                       <RaisedButton label="Submit" primary={true} type="submit"/>
                       <div style={{margin: '30px'}}/>
-                      <RaisedButton onClick={() => this.props.history.push('/register')} label="Register" />
+                      <RaisedButton onClick={() => this.props.history.push('/register')} label="Go to Registration" />
                    </div>
                </form>
             </MuiThemeProvider>

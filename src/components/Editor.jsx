@@ -1,5 +1,5 @@
 import React from 'react';
-import { Editor, EditorState, RichUtils, StyleButton } from 'draft-js';
+import { Editor, EditorState, RichUtils, StyleButton, InlineStyleOverride } from 'draft-js';
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 import InlineEdit from 'react-edit-inline';
 import createStyles from 'draft-js-custom-styles';
@@ -12,46 +12,20 @@ class TextEditor extends React.Component {
       editorState: EditorState.createEmpty(),
       textAlignment: 'left',
       title: 'Untitled',
+      fontSize: 14,
     };
     this.onChange = (editorState) => {
       this.setState({ editorState });
     };
     this.titleChange = this.titleChange.bind(this)
+    this.toggleColor = (toggledColor) => this._toggleColor(toggledColor);
   }
+
 
   titleChange(input) {
     const newTitle = input[this.state.title]
     this.setState({title: newTitle})
   }
-
-  // _toggleColor(color) {
-  //   const {editorState} = this.state;
-  //   const selection = editorState.getSelection();
-  //
-  //   const nextContentState = Object.keys(colorStyleMap).reduce((contentState, color) => {
-  //     return Modifier.removeInlineStyle(contentState, selection, color)
-  //   }, editorState.getCurrentContent());
-  //   let nextEditorState = EditorState.push(
-  //     editorState,
-  //     nextContentState,
-  //     'change-inline-style'
-  //   );
-  //   const currentStyle = editorState.getCurrentInlineStyle();
-  //   // Unset style override for current color.
-  //   if (selection.isCollapsed()) {
-  //     nextEditorState = currentStyle.reduce((state, color) => {
-  //       return RichUtils.toggleInlineStyle(state, color);
-  //     }, nextEditorState);
-  //   }
-  //   // If the color is being toggled on, apply it.
-  //   if (!currentStyle.has(color)) {
-  //     nextEditorState = RichUtils.toggleInlineStyle(
-  //       nextEditorState,
-  //       color
-  //     );
-  //   }
-  //   this.onChange(nextEditorState);
-  // }
 
   _onBoldClick(e) {
     e.preventDefault();
@@ -66,6 +40,22 @@ class TextEditor extends React.Component {
   _onUnderlineClick(e) {
     e.preventDefault();
     this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'UNDERLINE'));
+  }
+
+  _onColorClick(e, colorLabel) {
+    e.preventDefault();
+    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, colorLabel));
+    this.setState({
+      editorState: EditorState.setInlineStyleOverride(this.state.editorState, EditorState.getInlineStyleOverride(this.state.editorState).add(colorLabel))
+    })
+  }
+
+  _onSizeClick(e, size) {
+    e.preventDefault();
+    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, size));
+    this.setState({
+      editorState: EditorState.setInlineStyleOverride(this.state.editorState, EditorState.getInlineStyleOverride(this.state.editorState).add(size))
+    })
   }
 
   _onLeftAlignClick(e) {
@@ -136,24 +126,26 @@ class TextEditor extends React.Component {
             bsSize="xs"
             title="Font Size"
             className="dropdown-btn"
-            id="font-size"
-          >
+            id="font-size">
             {fontSizes.map((size) => {
               return <MenuItem
-                  eventKey={size}
-                >
-                  {size}
-                </MenuItem>
+                eventKey={size}
+                onClick={ (e) => this._onSizeClick(e, size) }>
+                {size}
+              </MenuItem>
             })}
           </DropdownButton>
           <DropdownButton
             bsSize="xs"
             title="Font Color"
             className="dropdown-btn"
-            id="font-color"
-          >
+            id="font-color">
             {colors.map((color) => {
-              return <MenuItem eventKey={color.style}>{color.label}</MenuItem>
+              return <MenuItem
+                eventKey={color.style}
+                onClick={ (e) => this._onColorClick(e, color.label) }>
+                {color.label}
+              </MenuItem>
             })}
           </DropdownButton>
           <button
@@ -200,6 +192,57 @@ class TextEditor extends React.Component {
 
 const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 48, 72];
 
+const fontSizeStyleMap = {
+  8: {
+    fontSize: 8,
+  },
+  9: {
+    fontSize: 9,
+  },
+  10: {
+    fontSize: 10,
+  },
+  11: {
+    fontSize: 11,
+  },
+  12: {
+    fontSize: 12,
+  },
+  14: {
+    fontSize: 14,
+  },
+  16: {
+    fontSize: 16,
+  },
+  18: {
+    fontSize: 18,
+  },
+  20: {
+    fontSize: 20,
+  },
+  22: {
+    fontSize: 22,
+  },
+  24: {
+    fontSize: 24,
+  },
+  28: {
+    fontSize: 28,
+  },
+  32: {
+    fontSize: 32,
+  },
+  36: {
+    fontSize: 36,
+  },
+  48: {
+    fontSize: 48,
+  },
+  72: {
+    fontSize: 72,
+  },
+};
+
 const colors = [
   {label: 'Black', style: 'black'},
   {label: 'White', style: 'white'},
@@ -214,35 +257,83 @@ const colors = [
 ];
 
 const colorStyleMap = {
-  black: {
+  Black: {
     color: 'rgba(0, 0, 0, 1.0)',
   },
-  white: {
+  White: {
     color: 'rgba(255, 255, 255, 1.0)',
   },
-  gray: {
-    color: 'rgba(128, 128, 128, 1.0)',
+  Gray: {
+    color: 'rgba(127, 127, 127, 1.0)',
   },
-  red: {
+  Red: {
     color: 'rgba(255, 0, 0, 1.0)',
   },
-  orange: {
+  Orange: {
     color: 'rgba(255, 127, 0, 1.0)',
   },
-  yellow: {
+  Yellow: {
     color: 'rgba(180, 180, 0, 1.0)',
   },
-  green: {
+  Green: {
     color: 'rgba(0, 180, 0, 1.0)',
   },
-  blue: {
+  Blue: {
     color: 'rgba(0, 0, 255, 1.0)',
   },
-  indigo: {
+  Indigo: {
     color: 'rgba(75, 0, 130, 1.0)',
   },
-  violet: {
+  Violet: {
     color: 'rgba(127, 0, 255, 1.0)',
+  },
+  8: {
+    fontSize: 8,
+  },
+  9: {
+    fontSize: 9,
+  },
+  10: {
+    fontSize: 10,
+  },
+  11: {
+    fontSize: 11,
+  },
+  12: {
+    fontSize: 12,
+  },
+  14: {
+    fontSize: 14,
+  },
+  16: {
+    fontSize: 16,
+  },
+  18: {
+    fontSize: 18,
+  },
+  20: {
+    fontSize: 20,
+  },
+  22: {
+    fontSize: 22,
+  },
+  24: {
+    fontSize: 24,
+  },
+  28: {
+    fontSize: 28,
+  },
+  32: {
+    fontSize: 32,
+  },
+  36: {
+    fontSize: 36,
+  },
+  48: {
+    fontSize: 48,
+  },
+  72: {
+    fontSize: 72,
   },
 };
 

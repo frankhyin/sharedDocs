@@ -112,13 +112,13 @@ class Register extends React.Component {
               <form onSubmit={(e) => this.handleSubmit(e)}>
                   <AppBar title="Register"/>
                 <div style={center}>
-                    <div style={{margin: '10px'}}/>
+                    <div style={{margin: '100px'}}/>
                     <div>
                         <TextField
                              hintText="Enter your Email address"
                              floatingLabelText="Email"
                              onChange={(e) => this.handleEmailChange(e)}
-                             value={this.state.displayNameInput}
+                             value={this.state.emailInput}
                              errorText={this.state.emailError}
                          />
                         <br/>
@@ -159,8 +159,7 @@ class Register extends React.Component {
                     <br/>
                     <RaisedButton label="Submit" primary={true} type="submit"/>
                     <div style={{margin: '30px'}}/>
-                    <RaisedButton onClick={() => this.props.history.push('/login')} label="Login" />
-
+                    <RaisedButton onClick={() => this.props.history.push('/login')} label="Go to Login" />
                  </div>
              </form>
           </MuiThemeProvider>
