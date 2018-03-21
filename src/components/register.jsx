@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 
 class Register extends React.Component {
   constructor(props) {
@@ -39,7 +40,7 @@ class Register extends React.Component {
         success = false;
     }
 
-    if (!this.state.password2) {
+    if (!this.state.password2Input) {
         this.setState({password2Error: "Please verify your password"});
         success = false;
     }
@@ -49,7 +50,26 @@ class Register extends React.Component {
         success = false;
     }
     if (success) {
-        alert("Registered!");
+        fetch('http://localhost:3000/register', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              email: this.state.emailInput,
+              displayName: this.state.displayNameInput,
+              password: this.state.passwordInput,
+              password2: this.state.password2Input
+          })
+        })
+        .then(res => res.json())
+        .then((result) => {
+            this.props.history.push('/login');
+        })
+        .catch((error) => {
+            console.log("Error: ", error)
+        })
     }
   }
 
@@ -97,7 +117,7 @@ class Register extends React.Component {
               type="text"
               placeholder="Display name"
               onChange={(e) => this.handleDisplayNameChange(e)}
-              value={this.state.emailInput}
+              value={this.state.displayNameInput}
             />
             <span>{this.state.displayNameError}</span>
         </div>
@@ -130,4 +150,4 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+export default withRouter(Register);
