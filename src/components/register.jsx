@@ -142,6 +142,7 @@ class Register extends React.Component {
                              onChange={(e) => this.handlePasswordChange(e)}
                              value={this.state.passwordInput}
                              errorText={this.state.passwordError}
+                             type="password"
                          />
                         <br/>
                     </div>
@@ -153,6 +154,7 @@ class Register extends React.Component {
                              onChange={(e) => this.handlePassword2Change(e)}
                              value={this.state.password2Input}
                              errorText={this.state.password2Error}
+                             type="password"
                          />
                         <br/>
                     </div>

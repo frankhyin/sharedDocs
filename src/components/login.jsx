@@ -96,6 +96,7 @@ class Login extends React.Component {
                                onChange={(e) => this.handlePasswordChange(e)}
                                value={this.state.passwordInput}
                                errorText={this.state.passwordError}
+                               type="password"
                            />
                           <br/>
                       </div>
