@@ -1,4 +1,8 @@
 import React from 'react';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AppBar from 'material-ui/AppBar';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 import { withRouter } from 'react-router';
 
 class Register extends React.Component {
@@ -26,7 +30,7 @@ class Register extends React.Component {
     var success = true;
 
     if (!this.state.emailInput) {
-        this.setState({emailError: "Please enter your email"});
+        this.setState({emailError: "Please enter your email address"});
         success = false;
     }
 
@@ -98,54 +102,70 @@ class Register extends React.Component {
   }
 
   render() {
+      const center = {
+          textAlign: 'center',
+      }
+
     return (
-      <form
-        onSubmit={(e) => this.handleSubmit(e)}
-       >
-        <div>
-            <input
-              type="text"
-              placeholder="Email"
-              onChange={(e) => this.handleEmailChange(e)}
-              value={this.state.emailInput}
-            />
-            <span>{this.state.emailError}</span>
-        </div>
+      <div>
+          <MuiThemeProvider>
+              <form onSubmit={(e) => this.handleSubmit(e)}>
+                  <AppBar title="Register"/>
+                <div style={center}>
+                    <div style={{margin: '100px'}}/>
+                    <div>
+                        <TextField
+                             hintText="Enter your Email address"
+                             floatingLabelText="Email"
+                             onChange={(e) => this.handleEmailChange(e)}
+                             value={this.state.emailInput}
+                             errorText={this.state.emailError}
+                         />
+                        <br/>
+                    </div>
 
-        <div>
-            <input
-              type="text"
-              placeholder="Display name"
-              onChange={(e) => this.handleDisplayNameChange(e)}
-              value={this.state.displayNameInput}
-            />
-            <span>{this.state.displayNameError}</span>
-        </div>
+                    <div>
+                        <TextField
+                             hintText="Enter your Diplay Name"
+                             floatingLabelText="Display Name"
+                             onChange={(e) => this.handleDisplayNameChange(e)}
+                             value={this.state.displayNameInput}
+                             errorText={this.state.displayNameError}
+                         />
+                        <br/>
+                    </div>
 
-        <div>
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={(e) => this.handlePasswordChange(e)}
-              value={this.state.passwordInput}
-             />
-             <span>{this.state.passwordError}</span>
-         </div>
+                    <div>
+                        <TextField
+                             hintText="Enter a Password"
+                             floatingLabelText="Password"
+                             onChange={(e) => this.handlePasswordChange(e)}
+                             value={this.state.passwordInput}
+                             errorText={this.state.passwordError}
+                             type="password"
+                         />
+                        <br/>
+                    </div>
 
-         <div>
-             <input
-               type="password"
-               placeholder="Verify your password"
-               onChange={(e) => this.handlePassword2Change(e)}
-               value={this.state.password2Input}
-              />
-              <span>{this.state.password2Error}</span>
-          </div>
-        <input
-          type="submit"
-          value="Register"
-         />
-      </form>
+                    <div>
+                        <TextField
+                             hintText="Verify your Password"
+                             floatingLabelText="Verify your Password"
+                             onChange={(e) => this.handlePassword2Change(e)}
+                             value={this.state.password2Input}
+                             errorText={this.state.password2Error}
+                             type="password"
+                         />
+                        <br/>
+                    </div>
+                    <br/>
+                    <RaisedButton label="Submit" primary={true} type="submit"/>
+                    <div style={{margin: '30px'}}/>
+                    <RaisedButton onClick={() => this.props.history.push('/login')} label="Go to Login" />
+                 </div>
+             </form>
+          </MuiThemeProvider>
+      </div>
     )
   }
 }

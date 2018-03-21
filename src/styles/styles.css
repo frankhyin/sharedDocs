@@ -3,6 +3,10 @@
   margin-right: 5px;
 }
 
+html {
+    font-family: Roboto;
+}
+
 #title {
   text-align: center;
 }
@@ -24,8 +28,4 @@
   display: flex;
   text-align: center;
   align-items: center;
-}
-
-svg {
-  color: white;
 }
