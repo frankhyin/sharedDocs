@@ -3,6 +3,10 @@
   margin-right: 5px;
 }
 
+html {
+    font-family: Roboto;
+}
+
 #title {
   text-align: center;
   margin: 10px;

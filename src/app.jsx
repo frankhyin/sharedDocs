@@ -10,7 +10,7 @@ export default class App extends React.Component {
     return (<div>
       <HashRouter>
         <Switch>
-          <Route path="/" exact component={Register}/>
+          <Route path="/" exact component={Login}/>
           <Route path="/login" exact component={Login}/>
           <Route path="/register" exact component={Register}/>
           <Route path="/Editor" exact component={TextEditor}/>

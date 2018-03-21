@@ -1,4 +1,9 @@
 import React from 'react';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AppBar from 'material-ui/AppBar';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import { withRouter } from 'react-router';
 
 class Login extends React.Component {
   constructor(props) {
@@ -19,7 +24,7 @@ class Login extends React.Component {
     var success = true;
 
     if (!this.state.emailInput) {
-        this.setState({emailError: "Please enter your email"});
+        this.setState({emailError: "Please enter your email address"});
         success = false;
     }
 
@@ -65,39 +70,47 @@ class Login extends React.Component {
 
 
   render() {
-    return (
-      <form
-        onSubmit={(e) => this.handleSubmit(e)}
-       >
+      const center = {
+          textAlign: 'center',
+      }
+      return (
         <div>
-            <input
-              type="text"
-              placeholder="Email"
-              onChange={(e) => this.handleEmailChange(e)}
-              value={this.state.emailInput}
-            />
+            <MuiThemeProvider>
+                <form onSubmit={(e) => this.handleSubmit(e)}>
+                    <AppBar title="Login"/>
+                  <div style={center}>
+                      <div style={{margin: '190px'}}/>
+                      <div>
+                          <TextField
+                               hintText="Enter your Email address"
+                               floatingLabelText="Email"
+                               onChange={(e) => this.handleEmailChange(e)}
+                               value={this.state.displayNameInput}
+                               errorText={this.state.emailError}
+                           />
+                          <br/>
+                      </div>
 
-            <span>{this.state.emailError}</span>
+                      <div>
+                          <TextField
+                               hintText="Enter a Password"
+                               floatingLabelText="Password"
+                               onChange={(e) => this.handlePasswordChange(e)}
+                               value={this.state.passwordInput}
+                               errorText={this.state.passwordError}
+                           />
+                          <br/>
+                      </div>
+                      <br/>
+                      <RaisedButton label="Submit" primary={true} type="submit"/>
+                      <div style={{margin: '30px'}}/>
+                      <RaisedButton onClick={() => this.props.history.push('/register')} label="Register" />
+                   </div>
+               </form>
+            </MuiThemeProvider>
         </div>
-
-        <div>
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={(e) => this.handlePasswordChange(e)}
-              value={this.state.passwordInput}
-             />
-
-             <span>{this.state.passwordError}</span>
-         </div>
-
-        <input
-          type="submit"
-          value="Login"
-         />
-      </form>
-    )
+      )
   }
 }
 
-export default Login;
+export default withRouter(Login);
