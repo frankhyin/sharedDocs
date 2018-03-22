@@ -8,6 +8,10 @@ import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+// import Divider from 'material-ui/Divider';
+// import Paper from 'material-ui/Paper';
 import { withRouter } from 'react-router';
 
 const jwt = require('jsonwebtoken');
@@ -110,6 +114,9 @@ class Home extends React.Component {
           display: 'flex',
           alignItems: 'center',
       }
+      const style = {
+          marginLeft: 20,
+      };
       return (
           <div>
               <MuiThemeProvider>
@@ -120,7 +127,10 @@ class Home extends React.Component {
                       onLeftIconButtonClick={this.handleDrawerOpen}
                       >
                       <div>
-                        <FlatButton label="Create a new Document" primary={true} style={{backgroundColor: '#fff'}} onClick={this.handleOpen} />
+                        {/* <FlatButton label="Create a new Document" primary={true} style={{backgroundColor: '#fff'}} onClick={this.handleOpen} /> */}
+                        <IconButton tooltip="New Document" onClick={ (e) => alert("Hey!") }>
+                          <ContentAdd color='#fff' />
+                        </IconButton>
                         <form onSubmit={(e) => this.handleNewDoc(e)}>
                             <Dialog
                               title="Create a new Document"
@@ -143,6 +153,16 @@ class Home extends React.Component {
                   <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
                     <MenuItem onClick={this.handleLogOut}>Log Out</MenuItem>
                   </Drawer>
+                  {/* <Paper zDepth={2}>
+                      <TextField hintText="First name" style={style} underlineShow={false} />
+                      <Divider />
+                      <TextField hintText="Middle name" style={style} underlineShow={false} />
+                      <Divider />
+                      <TextField hintText="Last name" style={style} underlineShow={false} />
+                      <Divider />
+                      <TextField hintText="Email address" style={style} underlineShow={false} />
+                      <Divider />
+                  </Paper> */}
                   </div>
               </MuiThemeProvider>
           </div>
