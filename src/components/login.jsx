@@ -46,6 +46,10 @@ class Login extends React.Component {
         })
         .then(res => res.json())
         .then((result) => {
+            console.log("Result: ", result)
+            window.localStorage.setItem("cookie", result.cookie)
+            // window.localStorage.setItem("cookie", result.displayName)
+            // window.localStorage.setItem("cookie", result.email)
             this.props.history.push('/home');
         })
         .catch((error) => {
