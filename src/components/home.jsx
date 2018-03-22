@@ -8,17 +8,19 @@ import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
 import { withRouter } from 'react-router';
 
+const jwt = require('jsonwebtoken');
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
         open: false,
-        // title: 'Untitled',
+        title: 'Untitled',
     }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleLogOut = this.handleLogOut.bind(this)
-    // this.handleTitleChange = this.handleTitleChange.bind(this)
+    this.handleTitleChange = this.handleTitleChange.bind(this)
     // this.handleNewDoc = this.handleNewDoc.bind(this)
   }
 
@@ -36,7 +38,8 @@ class Home extends React.Component {
           headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
-              'Cookie': window.localStorage.getItem('cookie'),
+              'Authorization': `Bearer ${jwt.sign({
+              }, process.env.JWT_SECRET)}`
           }
       })
       .then(res => res.json())
@@ -50,12 +53,13 @@ class Home extends React.Component {
       })
   }
 
-  // handleTitleChange(event){
-  //   this.setState({
-  //     titleInput: event.target.value
-  //   })
-  // }
-  //
+  handleTitleChange(event){
+    this.setState({
+      titleInput: event.target.value
+    })
+    alert("Hi David!")
+  }
+
   // handleNewDoc() {
   //     fetch('http://localhost:3000/home', {
   //       method: 'POST',
