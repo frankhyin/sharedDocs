@@ -5,6 +5,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { withRouter } from 'react-router';
 
+const jwt = require('jsonwebtoken');
+
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -38,11 +41,11 @@ class Login extends React.Component {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-              email: this.state.emailInput,
-              password: this.state.passwordInput
-          })
+            'Authorization': `Bearer ${jwt.sign({
+                email: this.state.emailInput,
+                password: this.state.passwordInput
+            }, process.env.JWT_SECRET)}`
+          }
         })
         .then(res => res.json())
         .then((result) => {
