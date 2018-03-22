@@ -16,26 +16,18 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-<<<<<<< HEAD
-        open: false,
         titleInput: 'Untitled',
-=======
         open: false, //dialogue open
         drawerOpen: false, //drawer open
-        title: 'Untitled',
->>>>>>> 553a245303798654cc03f2b07edde42bbb64ab78
     }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleLogOut = this.handleLogOut.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
-<<<<<<< HEAD
     this.handleNewDoc = this.handleNewDoc.bind(this)
-=======
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this)
     this.handleDrawerClose = this.handleDrawerClose.bind(this)
     // this.handleNewDoc = this.handleNewDoc.bind(this)
->>>>>>> 553a245303798654cc03f2b07edde42bbb64ab78
   }
 
   handleOpen() {
@@ -105,7 +97,6 @@ class Home extends React.Component {
   }
 
   componentDidMount(){
-    console.log('mount')
     fetch('http://localhost:3000/home', {
           method: 'GET',
           headers: {
@@ -152,12 +143,8 @@ class Home extends React.Component {
                       onLeftIconButtonClick={this.handleDrawerOpen}
                       >
                       <div>
-<<<<<<< HEAD
                         <RaisedButton label="Create a new Document" primary={true} onClick={this.handleOpen} />
-=======
                         <FlatButton label="Create a new Document" primary={true} style={{backgroundColor: '#fff'}} onClick={this.handleOpen} />
-                        <form onSubmit={(e) => this.handleNewDoc(e)}>
->>>>>>> 553a245303798654cc03f2b07edde42bbb64ab78
                             <Dialog
                               title="Create a new Document"
                               actions={actions}
@@ -172,11 +159,7 @@ class Home extends React.Component {
                                    // errorText={this.state.emailError}
                                />
                             </Dialog>
-<<<<<<< HEAD
                         <RaisedButton onClick={this.handleLogOut} label="Log Out" />
-=======
-                        </form>
->>>>>>> 553a245303798654cc03f2b07edde42bbb64ab78
                       </div>
                   </AppBar>
                   <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
