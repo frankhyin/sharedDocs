@@ -34,7 +34,7 @@ class Home extends React.Component {
 
   handleLogOut() {
       fetch('http://localhost:3000/logout', {
-          method: 'POST',
+          method: 'GET',
           headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ class Home extends React.Component {
           <div>
               <MuiThemeProvider>
                   <div>
-                  <AppBar title="Home"/>
+                  <AppBar title={`Welcome, ${global.displayName || '?'}`}/>
                       <div>
                         <RaisedButton label="Create a new Document" primary={true} onClick={this.handleOpen} />
                         {/* <form onSubmit={(e) => this.handleNewDoc(e)}> */}

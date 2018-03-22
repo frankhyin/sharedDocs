@@ -50,6 +50,7 @@ class Login extends React.Component {
         .then(res => res.json())
         .then((result) => {
             console.log("Result: ", result)
+            global.displayName = result.displayName;
             this.props.history.push('/home');
         })
         .catch((error) => {
