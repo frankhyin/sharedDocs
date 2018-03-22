@@ -1,16 +1,21 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import { EditorState, convertToRaw } from 'draft-js';
-import { Button, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 import InlineEdit from 'react-edit-inline';
 import { Editor } from 'react-draft-wysiwyg';
+
 import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import FlatButton from 'material-ui/FlatButton';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import SaveIcon from 'material-ui/svg-icons/content/save';
 import Dialog from 'material-ui/Dialog';
+import Drawer from 'material-ui/Drawer';
+import FlatButton from 'material-ui/FlatButton';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import IconButton from 'material-ui/IconButton';
+import MenuItem from 'material-ui/MenuItem';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import SaveIcon from 'material-ui/svg-icons/content/save';
+import Snackbar from 'material-ui/Snackbar';
+import TextField from 'material-ui/TextField';
+
 
 class TextEditor extends React.Component {
   constructor(props) {
@@ -18,27 +23,49 @@ class TextEditor extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(),
       title: 'Untitled',
-      open: false,
+      drawerOpen: false,
+      snackbarOpen: false,
+      dialogOpen: false,
+      error: '',
+      email: '',
     };
     this.onChange = (editorState) => {
       this.setState({ editorState });
     };
   }
 
-  handleOpen = () => {
-    debugger
-    this.setState({open: true})
+  handleDrawerOpen = () => {
+    this.setState({drawerOpen: true})
   }
 
-  handleClose = () => {
-    this.setState({open: false})
+  handleDrawerClose = () => {
+    this.setState({drawerOpen: false})
   }
 
-  titleChange = (input) => {
-    debugger;
-    const newTitle = input[this.state.title]
-    this.setState({title: newTitle})
+  handleDialogOpen = () => {
+    this.setState({dialogOpen: true})
   }
+
+  handleDialogClose = () => {
+    this.setState({dialogOpen: false})
+  }
+
+  handleSnackbarOpen = () => {
+    this.setState({snackbarOpen: true})
+  }
+
+  handleSnackbarClose = () => {
+    this.setState({snackbarOpen: false})
+  }
+
+  handleRequestClose = () => {
+    this.setState({snackbarOpen: false});
+  };
+
+  // This will be used to add collaborators
+  // share = () => {
+  //   this.setState()
+  // }
 
   save(e) {
     e.preventDefault();
@@ -54,7 +81,6 @@ class TextEditor extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-          id: this.props.id,
           title: this.state.title,
           content: contentState,
       })
@@ -68,7 +94,7 @@ class TextEditor extends React.Component {
         console.log("Error: ", error)
     })
   }
-  
+
   componentDidMount() {
     this.h1 = findDOMNode(this.refs.AppBar).children[1];
     this.h1.addEventListener('click', e => {
@@ -84,9 +110,11 @@ class TextEditor extends React.Component {
           e.preventDefault();
           this.editingh1 = '';
           this.h1.setAttribute('contenteditable', false);
+          const prev = this.state.title;
           this.setState({
-            title: this.h1.innerText
+            title: this.h1.innerText,
           })
+          this.handleSnackbarOpen();
         } else if (e.key === 'Escape') {
           e.preventDefault();
           this.h1.setAttribute('contenteditable', false);
@@ -96,7 +124,7 @@ class TextEditor extends React.Component {
       }
     })
     window.addEventListener('click', e => {
-      if (!this.h1.contains(e.target)) {
+      if (this.editingh1 && !this.h1.contains(e.target)) {
         e.preventDefault();
         this.h1.setAttribute('contenteditable', false);
         this.h1.innerText = this.editingh1;
@@ -104,16 +132,55 @@ class TextEditor extends React.Component {
       }
     })
   }
+
   render() {
+    const oldTitle = this.state.prevTitle;
+    const newTitle = this.state.title;
+    const collaborators = [
+      <MenuItem disabled={true} style={{color: 'black'}}>A</MenuItem>,
+      <MenuItem disabled={true} style={{color: 'black'}}>B</MenuItem>,
+      <MenuItem disabled={true} style={{color: 'black'}}>C</MenuItem>,
+      <MenuItem>Close</MenuItem>,
+    ]
     return (
       <div>
         <MuiThemeProvider>
           <div>
-            <AppBar title={this.state.title} id="my-appbar"  ref="AppBar">
-              <IconButton tooltip="Save">
+            <AppBar
+              title={this.state.title}
+              id="my-appbar"
+              ref="AppBar"
+              onLeftIconButtonClick={this.handleDrawerOpen}
+            >
+              <IconButton tooltip="Save" onClick={ (e) => this.save(e) }>
                 <SaveIcon color='#fff' />
               </IconButton>
             </AppBar>
+            <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
+              <MenuItem style={{color: '#fff', backgroundColor: "rgb(0, 188, 212)"}}>Home</MenuItem>
+              <MenuItem onClick={this.handleDialogOpen}>Share</MenuItem>
+              <MenuItem menuItems={collaborators}>Collaborators</MenuItem>
+              <MenuItem onClick={this.handleDrawerClose}>Close</MenuItem>
+            </Drawer>
+            <Dialog
+              title="Share"
+              open={this.state.dialogOpen}
+              onRequestClose={this.handleDialogClose}
+            >
+              <TextField
+                hintText="Email"
+                floatingLabelText="Add new email"
+                onChange={ (email) => this.setState({email}) }
+                errorText={this.state.error}
+              />
+              <FlatButton label="Add" type="submit" primary={true} onClick={this.addEmail} />
+            </Dialog>
+            <Snackbar
+              open={this.state.snackbarOpen}
+              message="Title changed!"
+              autoHideDuration={3000}
+              onRequestClose={this.handleRequestClose}
+            />
           </div>
         </MuiThemeProvider>
         <Editor
