@@ -47,7 +47,7 @@ class Home extends React.Component {
 
   handleLogOut() {
       fetch('http://localhost:3000/logout', {
-          method: 'POST',
+          method: 'GET',
           headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
