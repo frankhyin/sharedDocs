@@ -3,6 +3,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
 import { withRouter } from 'react-router';
 
 const jwt = require('jsonwebtoken');
@@ -15,11 +17,22 @@ class Login extends React.Component {
       emailInput: '',
       passwordInput: '',
       emailError: '',
-      passwordError: ''
+      passwordError: '',
+      drawerOpen: false,
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
+    this.handleDrawerOpen = this.handleDrawerOpen.bind(this)
+    this.handleDrawerClose = this.handleDrawerClose.bind(this)
+  }
+
+  handleDrawerOpen() {
+    this.setState({drawerOpen: true})
+  }
+
+  handleDrawerClose() {
+    this.setState({drawerOpen: false})
   }
 
   handleSubmit(event) {
@@ -84,7 +97,13 @@ class Login extends React.Component {
         <div>
             <MuiThemeProvider>
                 <form onSubmit={(e) => this.handleSubmit(e)}>
-                    <AppBar title="Login"/>
+                    <AppBar
+                        title="Login"
+                        onLeftIconButtonClick={this.handleDrawerOpen}
+                    />
+                    <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
+                      <MenuItem onClick={() => this.props.history.push('/register')}>Go to Register</MenuItem>
+                    </Drawer>
                   <div style={center}>
                       <div style={{margin: '190px'}}/>
                       <div>
@@ -111,8 +130,6 @@ class Login extends React.Component {
                       </div>
                       <br/>
                       <RaisedButton label="Submit" primary={true} type="submit"/>
-                      <div style={{margin: '30px'}}/>
-                      <RaisedButton onClick={() => this.props.history.push('/register')} label="Go to Registration" />
                    </div>
                </form>
             </MuiThemeProvider>
