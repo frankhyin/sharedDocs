@@ -20,30 +20,18 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-<<<<<<< HEAD
         titleInput: 'Untitled',
         open: false, //dialogue open
         drawerOpen: false, //drawer open
-=======
-        open: false, //dialogue open
-        drawerOpen: false, //drawer open
-        title: 'Untitled',
->>>>>>> 933e159fd20d6a8ca1afe4814fea408037cb75ab
     }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleLogOut = this.handleLogOut.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
-<<<<<<< HEAD
-    this.handleNewDoc = this.handleNewDoc.bind(this)
-    this.handleDrawerOpen = this.handleDrawerOpen.bind(this)
-    this.handleDrawerClose = this.handleDrawerClose.bind(this)
-    // this.handleNewDoc = this.handleNewDoc.bind(this)
-=======
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this)
     this.handleDrawerClose = this.handleDrawerClose.bind(this)
     this.handleNewDoc = this.handleNewDoc.bind(this)
->>>>>>> 933e159fd20d6a8ca1afe4814fea408037cb75ab
+
   }
 
   handleOpen() {
@@ -162,15 +150,12 @@ class Home extends React.Component {
                       onLeftIconButtonClick={this.handleDrawerOpen}
                       >
                       <div>
-<<<<<<< HEAD
-                        <RaisedButton label="Create a new Document" primary={true} onClick={this.handleOpen} />
-                        <FlatButton label="Create a new Document" primary={true} style={{backgroundColor: '#fff'}} onClick={this.handleOpen} />
-=======
-                        {/* <FlatButton label="Create a new Document" primary={true} style={{backgroundColor: '#fff'}} onClick={this.handleOpen} /> */}
-                        <IconButton tooltip="New Document" onClick={ (e) => alert("Hey!") }>
+                        <IconButton tooltip="New Document"
+                            label="Dialog"
+                            onClick={this.handleOpen}
+                            >
                           <ContentAdd color='#fff' />
                         </IconButton>
->>>>>>> 933e159fd20d6a8ca1afe4814fea408037cb75ab
                             <Dialog
                               title="Create a new Document"
                               actions={actions}
@@ -185,7 +170,6 @@ class Home extends React.Component {
                                    // errorText={this.state.emailError}
                                />
                             </Dialog>
-                        <RaisedButton onClick={this.handleLogOut} label="Log Out" />
                       </div>
                   </AppBar>
                   <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
