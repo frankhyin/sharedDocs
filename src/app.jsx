@@ -1,15 +1,21 @@
 import React from 'react';
 import Login from './components/login';
 import Register from './components/register';
-import Editor from './components/editor';
+import TextEditor from './components/editor';
 import Home from './components/home'
 import { HashRouter, Switch, Route } from 'react-router-dom';
+
+const collaborators = [
+  {name: 'A'},
+  {name: 'B'},
+  {name: 'C'}
+]
 
 export default class App extends React.Component {
   render() {
     return (
       <div>
-        <HashRouter>
+        {/* <HashRouter>
             <Switch>
                 <Route exact path="/" component={Login}/>
                 <Route exact path="/login" component={Login}/>
@@ -17,7 +23,8 @@ export default class App extends React.Component {
                 <Route exact path="/home" component={Home}/>
                 <Route exact path="/editor" component={Editor}/>
             </Switch>
-        </HashRouter>
+        </HashRouter> */}
+        <TextEditor title={'Untitled'} author={'Matt'} id={1} collaborators={collaborators} />
       </div>
     );
   }

@@ -171,12 +171,6 @@ class TextEditor extends React.Component {
   render() {
     const oldTitle = this.state.prevTitle;
     const newTitle = this.state.title;
-    const collaborators = [
-      <MenuItem disabled={true} style={{color: 'black'}}>A</MenuItem>,
-      <MenuItem disabled={true} style={{color: 'black'}}>B</MenuItem>,
-      <MenuItem disabled={true} style={{color: 'black'}}>C</MenuItem>,
-      <MenuItem>Close</MenuItem>,
-    ]
     return (
       <div>
         <MuiThemeProvider>
@@ -194,7 +188,9 @@ class TextEditor extends React.Component {
             <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
               <MenuItem style={styles.alternateFormat}>Home</MenuItem>
               <MenuItem onClick={this.handleDialogOpen}>Share</MenuItem>
-              <MenuItem menuItems={collaborators}>Collaborators</MenuItem>
+              <MenuItem menuItems={this.props.collaborators.map(person => {
+                return <MenuItem disabled={true} style={{color: 'black'}}>{person.name}</MenuItem>
+              }).concat([<MenuItem>Close</MenuItem>])}>Collaborators</MenuItem>
               <MenuItem onClick={this.handleDrawerClose}>Close</MenuItem>
             </Drawer>
             <Dialog
