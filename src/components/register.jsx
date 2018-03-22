@@ -3,6 +3,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
 import { withRouter } from 'react-router';
 
 class Register extends React.Component {
@@ -16,13 +18,24 @@ class Register extends React.Component {
       emailError: '',
       displayNameError: '',
       passwordError: '',
-      password2Error: ''
+      password2Error: '',
+      drawerOpen: false,
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handleDisplayNameChange = this.handleDisplayNameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
     this.handlePassword2Change = this.handlePassword2Change.bind(this)
+    this.handleDrawerOpen = this.handleDrawerOpen.bind(this)
+    this.handleDrawerClose = this.handleDrawerClose.bind(this)
+  }
+
+  handleDrawerOpen() {
+    this.setState({drawerOpen: true})
+  }
+
+  handleDrawerClose() {
+    this.setState({drawerOpen: false})
   }
 
   handleSubmit(event) {
@@ -110,7 +123,13 @@ class Register extends React.Component {
       <div>
           <MuiThemeProvider>
               <form onSubmit={(e) => this.handleSubmit(e)}>
-                  <AppBar title="Register"/>
+                  <AppBar
+                      title="Register"
+                      onLeftIconButtonClick={this.handleDrawerOpen}
+                  />
+                  <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
+                    <MenuItem onClick={() => this.props.history.push('/Login')}>Go to Login</MenuItem>
+                  </Drawer>
                 <div style={center}>
                     <div style={{margin: '100px'}}/>
                     <div>
@@ -160,8 +179,6 @@ class Register extends React.Component {
                     </div>
                     <br/>
                     <RaisedButton label="Submit" primary={true} type="submit"/>
-                    <div style={{margin: '30px'}}/>
-                    <RaisedButton onClick={() => this.props.history.push('/login')} label="Go to Login" />
                  </div>
              </form>
           </MuiThemeProvider>
