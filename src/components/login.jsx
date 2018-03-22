@@ -64,6 +64,10 @@ class Login extends React.Component {
         .then((result) => {
             console.log("Result: ", result)
             global.displayName = result.displayName;
+            global.token = `Bearer ${jwt.sign({
+                email: this.state.emailInput,
+                password: this.state.passwordInput
+            }, process.env.JWT_SECRET)}`;
             this.props.history.push('/home');
         })
         .catch((error) => {
