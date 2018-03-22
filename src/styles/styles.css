@@ -4,7 +4,7 @@
 }
 
 html {
-    font-family: Roboto;
+  font-family: Roboto;
 }
 
 #title {
@@ -26,6 +26,10 @@ html {
 
 #my-appbar {
   display: flex;
-  text-align: center;
   align-items: center;
+}
+
+.alternateFormat {
+  color: '#fff';
+  background-color: rgb(0, 188, 212);
 }
