@@ -7,6 +7,7 @@ import Dialog from 'material-ui/Dialog';
 import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
+import {Card, CardHeader, CardActions, CardText} from 'material-ui/Card';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -23,6 +24,7 @@ class Home extends React.Component {
         titleInput: 'Untitled',
         open: false, //dialogue open
         drawerOpen: false, //drawer open
+        documents: []
     }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
@@ -113,6 +115,9 @@ class Home extends React.Component {
           if (result.success) {
             console.log('/home', result);
           }
+          this.setState({
+            documents: result.documents
+          });
       })
       .catch((error) => {
           console.log("Error: ", error)
@@ -145,7 +150,7 @@ class Home extends React.Component {
                   <div>
                   <AppBar
                       style={appBar}
-                      title={global.displayName}
+                      title={`Welcome, ${global.displayName}.`}
                       onLeftIconButtonClick={this.handleDrawerOpen}
                       >
                       <div>
@@ -174,16 +179,26 @@ class Home extends React.Component {
                   <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
                     <MenuItem onClick={this.handleLogOut}>Log Out</MenuItem>
                   </Drawer>
-                  {/* <Paper zDepth={2}>
-                      <TextField hintText="First name" style={style} underlineShow={false} />
-                      <Divider />
-                      <TextField hintText="Middle name" style={style} underlineShow={false} />
-                      <Divider />
-                      <TextField hintText="Last name" style={style} underlineShow={false} />
-                      <Divider />
-                      <TextField hintText="Email address" style={style} underlineShow={false} />
-                      <Divider />
-                  </Paper> */}
+                  {/* <Card>
+                    <CardHeader title="Title" subtitle="By Author"/>
+                    <CardActions>
+                      <FlatButton label="Open" />
+                      <FlatButton label="Delete" />
+                    </CardActions>
+                  </Card> */}
+
+                  {this.state.documents.map((document) => <Card>
+                      <CardHeader title={document.title}/>
+                      <CardActions>
+                        <FlatButton label="Open" />
+                        <FlatButton label="Delete" />
+                      </CardActions>
+                    </Card>
+                  )}
+
+                  {console.log(this.state.documents)}
+
+
                   </div>
               </MuiThemeProvider>
           </div>
