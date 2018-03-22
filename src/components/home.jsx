@@ -37,11 +37,11 @@ class Home extends React.Component {
     this.setState({open: false})
   }
 
-  handleDrawerOpen = () => {
+  handleDrawerOpen() {
     this.setState({drawerOpen: true})
   }
 
-  handleDrawerClose = () => {
+  handleDrawerClose() {
     this.setState({drawerOpen: false})
   }
 

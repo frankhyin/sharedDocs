@@ -27,11 +27,11 @@ class Login extends React.Component {
     this.handleDrawerClose = this.handleDrawerClose.bind(this)
   }
 
-  handleDrawerOpen = () => {
+  handleDrawerOpen() {
     this.setState({drawerOpen: true})
   }
 
-  handleDrawerClose = () => {
+  handleDrawerClose() {
     this.setState({drawerOpen: false})
   }
 
