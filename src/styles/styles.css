@@ -9,7 +9,6 @@ html {
 
 #title {
   text-align: center;
-  /* margin: 10px; */
 }
 
 #toolbar {
@@ -20,30 +19,13 @@ html {
   border: solid 1px black;
 }
 
-.toolbar-btn {
-  height: 30px;
-  width: 30px;
-  border: solid 1px black;
-  border-radius: 3px;
+#save {
+  margin-top: 50px;
+  color: white;
 }
 
-.align-right {
-  text-align: right;
-}
-.align-center {
+#my-appbar {
+  display: flex;
   text-align: center;
-}
-.align-left {
-  text-align: left;
-}
-
-.dropdown-btn {
-  height: 30px;
-  width: 90px;
-  border: solid 1px black;
-  background-color: buttonface;
-}
-
-.hide {
-  display: none;
+  align-items: center;
 }

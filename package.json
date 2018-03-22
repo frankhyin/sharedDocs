@@ -70,6 +70,7 @@
     "react": "^15.4.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^15.4.1",
+    "react-draft-wysiwyg": "^1.12.11",
     "react-hot-loader": "^3.0.0-beta.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
@@ -80,6 +81,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-classes": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
