@@ -31,7 +31,6 @@ class Home extends React.Component {
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this)
     this.handleDrawerClose = this.handleDrawerClose.bind(this)
     this.handleNewDoc = this.handleNewDoc.bind(this)
-
   }
 
   handleOpen() {
@@ -146,7 +145,7 @@ class Home extends React.Component {
                   <div>
                   <AppBar
                       style={appBar}
-                      title="Home"
+                      title={global.displayName}
                       onLeftIconButtonClick={this.handleDrawerOpen}
                       >
                       <div>
