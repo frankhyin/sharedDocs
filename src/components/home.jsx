@@ -6,6 +6,8 @@ import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
 import { withRouter } from 'react-router';
 
 const jwt = require('jsonwebtoken');
@@ -14,13 +16,16 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        open: false,
+        open: false, //dialogue open
+        drawerOpen: false, //drawer open
         title: 'Untitled',
     }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleLogOut = this.handleLogOut.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
+    this.handleDrawerOpen = this.handleDrawerOpen.bind(this)
+    this.handleDrawerClose = this.handleDrawerClose.bind(this)
     // this.handleNewDoc = this.handleNewDoc.bind(this)
   }
 
@@ -30,6 +35,14 @@ class Home extends React.Component {
 
   handleClose() {
     this.setState({open: false})
+  }
+
+  handleDrawerOpen = () => {
+    this.setState({drawerOpen: true})
+  }
+
+  handleDrawerClose = () => {
+    this.setState({drawerOpen: false})
   }
 
   handleLogOut() {
@@ -93,17 +106,22 @@ class Home extends React.Component {
             onClick={this.handleClose}
           />,
         ];
-      const center = {
-          textAlign: 'center',
+      const appBar = {
+          display: 'flex',
+          alignItems: 'center',
       }
       return (
           <div>
               <MuiThemeProvider>
                   <div>
-                  <AppBar title="Home"/>
+                  <AppBar
+                      style={appBar}
+                      title="Home"
+                      onLeftIconButtonClick={this.handleDrawerOpen}
+                      >
                       <div>
-                        <RaisedButton label="Create a new Document" primary={true} onClick={this.handleOpen} />
-                        {/* <form onSubmit={(e) => this.handleNewDoc(e)}> */}
+                        <FlatButton label="Create a new Document" primary={true} style={{backgroundColor: '#fff'}} onClick={this.handleOpen} />
+                        <form onSubmit={(e) => this.handleNewDoc(e)}>
                             <Dialog
                               title="Create a new Document"
                               actions={actions}
@@ -119,9 +137,12 @@ class Home extends React.Component {
                                    // errorText={this.state.emailError}
                                />
                             </Dialog>
-                        {/* </form> */}
-                        <RaisedButton onClick={this.handleLogOut} label="Log Out" />
+                        </form>
                       </div>
+                  </AppBar>
+                  <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
+                    <MenuItem onClick={this.handleLogOut}>Log Out</MenuItem>
+                  </Drawer>
                   </div>
               </MuiThemeProvider>
           </div>
