@@ -49,31 +49,38 @@ class Login extends React.Component {
         success = false;
     }
     if (success) {
-        fetch('http://localhost:3000/login', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwt.sign({
-                email: this.state.emailInput,
-                password: this.state.passwordInput
-            }, process.env.JWT_SECRET)}`
-          }
-        })
-        .then(res => res.json())
-        .then((result) => {
-            console.log("Result: ", result)
-            global.displayName = result.displayName;
-            global.token = `Bearer ${jwt.sign({
-                email: this.state.emailInput,
-                password: this.state.passwordInput
-            }, process.env.JWT_SECRET)}`;
-            this.props.history.push('/home');
-        })
-        .catch((error) => {
-            console.log("Error: ", error)
-        })
+        global.token = `Bearer ${jwt.sign({
+            email: this.state.emailInput,
+            password: this.state.passwordInput
+        }, process.env.JWT_SECRET)}`;
+        window.localStorage.setItem('token', global.token);
+        this.login();
     }
+  }
+  login() {
+    return fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': global.token,
+      }
+    })
+    .then(res => res.json())
+    .then((result) => {
+        console.log("Result: ", result)
+        global.displayName = result.displayName;
+
+        this.props.history.push('/home');
+    })
+    .catch((error) => {
+        console.log("Error: ", error)
+    })
+  }
+  componentDidMount() {
+    global.token = window.localStorage.getItem('token');
+    if (global.token)
+      this.login();
   }
 
   handleEmailChange(event){
@@ -91,12 +98,16 @@ class Login extends React.Component {
 
   render() {
       const center = {
-          textAlign: 'center',
+          display: 'flex',
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
       }
       return (
         <div>
             <MuiThemeProvider>
-                <form onSubmit={(e) => this.handleSubmit(e)}>
+                <form onSubmit={(e) => this.handleSubmit(e)} style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
                     <AppBar
                         title="Login"
                         onLeftIconButtonClick={this.handleDrawerOpen}
@@ -105,7 +116,7 @@ class Login extends React.Component {
                       <MenuItem onClick={() => this.props.history.push('/register')} style={{marginTop: '15px'}}>Go to Register</MenuItem>
                     </Drawer>
                   <div style={center}>
-                      <div style={{margin: '190px'}}/>
+                    <div style={{marginTop: -40}}>
                       <div>
                           <TextField
                                hintText="Enter your Email address"
@@ -131,6 +142,7 @@ class Login extends React.Component {
                       <br/>
                       <RaisedButton label="Submit" primary={true} type="submit"/>
                    </div>
+                 </div>
                </form>
             </MuiThemeProvider>
         </div>
