@@ -37,6 +37,7 @@ class Home extends React.Component {
     this.handleDrawerClose = this.handleDrawerClose.bind(this)
     this.handleNewDoc = this.handleNewDoc.bind(this)
     this.handleSelectAll = this.handleSelectAll.bind(this)
+    this.handleDocumentOpen = this.handleDocumentOpen.bind(this)
   }
 
   handleOpen() {
@@ -108,6 +109,13 @@ class Home extends React.Component {
       .catch((error) => {
           console.log("Error: ", error)
       })
+  }
+
+  handleDocumentOpen(docId){
+    this.props.history.push({
+      pathname: '/editor',
+      state: {docId}
+    });
   }
 
   componentDidMount(){
@@ -213,7 +221,7 @@ class Home extends React.Component {
                           Collaborators: {document.collaborators}
                       </CardText>
                       <CardActions>
-                        <RaisedButton primary={true} label="Open" />
+                        <RaisedButton primary={true} label="Open" onClick={() => this.handleDocumentOpen(document._id)}/>
                         <FlatButton label="Delete" style={{marginLeft: '15px'}}/>
                       </CardActions>
                     </Card>
