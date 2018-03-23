@@ -47,7 +47,7 @@ class TextEditor extends React.Component {
       error: '',
       email: '',
       emailsToAdd: [],
-      collaborators: this.props.collaborators,
+      collaborators: ['None'],
     };
     this.onChange = (editorState) => {
       this.setState({ editorState });
@@ -115,6 +115,26 @@ class TextEditor extends React.Component {
     this.forceUpdate()
   }
 
+  home = () => {
+    fetch('http://localhost:3000/home', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': global.token
+      }
+    })
+    .then(res => res.json())
+    .then((result) => {
+      if (result.success) {
+        this.props.history.push('/home');
+      }
+    })
+    .catch((error) => {
+      console.log("Error: ", error)
+    })
+  }
+
   save = (e) => {
     e.preventDefault();
     const contentState = convertToRaw(this.state.editorState.getCurrentContent());
@@ -177,9 +197,11 @@ class TextEditor extends React.Component {
     .then((result) => {
         let raw = result.doc.content ? JSON.parse(result.doc.content)
           : EditorState.createEmpty();
+        console.log(result)
         this.setState({
           title: result.doc.title,
-          editorState: EditorState.createWithContent(convertFromRaw(raw))
+          editorState: EditorState.createWithContent(convertFromRaw(raw)),
+          collaborators: result.doc.collaborators
         })
     })
     .catch((error) => {
@@ -187,17 +209,19 @@ class TextEditor extends React.Component {
     })
     this.h1 = findDOMNode(this.refs.AppBar).children[1];
     this.h1.addEventListener('click', e => {
-      if (!this.editingh1) {
+      if (!this.isEditing) {
         this.h1.setAttribute('contenteditable', true);
         this.h1.focus();
         this.editingh1 = this.state.title;
+        this.isEditing = true;
       }
     })
     window.addEventListener('keydown', e => {
-      if (this.editingh1) {
+      if (this.isEditing) {
         if (e.key === 'Enter') {
           e.preventDefault();
           this.editingh1 = '';
+          this.isEditing = false;
           this.h1.setAttribute('contenteditable', false);
           const prev = this.state.title;
           this.setState({
@@ -210,6 +234,7 @@ class TextEditor extends React.Component {
           this.h1.setAttribute('contenteditable', false);
           this.h1.innerText = this.editingh1;
           this.editingh1 = '';
+          this.isEditing = false;
         }
       }
     })
@@ -239,11 +264,11 @@ class TextEditor extends React.Component {
               </IconButton>
             </AppBar>
             <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
-              <MenuItem style={styles.alternateFormat}>Home</MenuItem>
+              <MenuItem style={styles.alternateFormat} onClick={this.home}>Home</MenuItem>
               <MenuItem onClick={this.handleDialogOpen}>Share</MenuItem>
-              {/* <MenuItem menuItems={this.state.collaborators.map(person => {
+              <MenuItem menuItems={this.state.collaborators.map(person => {
                 return <MenuItem disabled={true} style={{color: 'black'}}>{person}</MenuItem>
-              }).concat([<MenuItem>Close</MenuItem>])}>Collaborators</MenuItem> */}
+              }).concat([<MenuItem>Close</MenuItem>])}>Collaborators</MenuItem>
               <MenuItem onClick={this.handleDrawerClose}>Close</MenuItem>
               <br />
               <MenuItem onClick={this.handleLogOut} style={{backgroundColor: '#f00', color: '#fff'}}>Logout</MenuItem>

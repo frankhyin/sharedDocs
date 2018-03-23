@@ -24,7 +24,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        titleInput: 'Untitled',
+        titleInput: '',
         open: false, //dialogue open
         drawerOpen: false, //drawer open
         documents: []
@@ -111,6 +111,30 @@ class Home extends React.Component {
       })
   }
 
+  // deleteDoc = (docId) => {
+  //   fetch('http://localhost:3000/doc/:id', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json',
+  //       'Authorization': global.token
+  //     },
+  //     body: JSON.stringify({
+  //         id: docId,
+  //     })
+  //     .then(res => res.json())
+  //     .then(result => {
+  //       result.findByIdAndRemove(docId)
+  //     })
+  //     .then(
+  //       const newDocs =
+  //       this.setState({
+  //         documents:
+  //       })
+  //     )
+  //   })
+  // }
+
   handleDocumentOpen(docId){
     this.props.history.push({
       pathname: '/editor',
@@ -190,7 +214,7 @@ class Home extends React.Component {
                               onRequestClose={this.handleClose}>
                               <TextField
                                    hintText="Give your Document a title"
-                                   floatingLabelText="Document"
+                                   floatingLabelText="Document Title"
                                    onChange={(e) => this.handleTitleChange(e)}
                                    value={this.state.titleInput}
                                    onClick={this.handleSelectAll}
@@ -201,9 +225,8 @@ class Home extends React.Component {
                       </div>
                   </AppBar>
                   <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
-                    <MenuItem onClick={this.handleLogOut} style={{marginTop: '15px'}}>Log Out</MenuItem>
+                    <MenuItem onClick={this.handleLogOut} style={{backgroundColor: '#f00', color: '#fff'}}>Log Out</MenuItem>
                   </Drawer>
-
                   {this.state.documents.map((document) =>
                      <Card key={document._id} style={card}>
                       <CardHeader
@@ -222,7 +245,7 @@ class Home extends React.Component {
                       </CardText>
                       <CardActions>
                         <RaisedButton primary={true} label="Open" onClick={() => this.handleDocumentOpen(document._id)}/>
-                        <FlatButton label="Delete" style={{marginLeft: '15px'}}/>
+                        <FlatButton label="Delete" style={{marginLeft: '15px'}} onClick={this.deleteDoc}/>
                       </CardActions>
                     </Card>
                   )}
