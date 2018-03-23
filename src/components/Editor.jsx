@@ -24,6 +24,7 @@ const styles = {
   alternateFormat: {
     color: '#fff',
     backgroundColor: 'rgb(0, 188, 212)',
+    marginTop: '15px'
   }
 }
 
@@ -97,16 +98,27 @@ class TextEditor extends React.Component {
   }
 
   addCollaborators = () => {
-    const newCollaborators = [...this.state.collaborators, this.state.emailsToAdd];
-    this.setState({
-      collaborators: newCollaborators,
-      snackbarMessage: 'Added users',
-      emailsToAdd: []
-    }, () => {})
-    this.handleDialogClose();
-    this.handleDrawerClose();
-    this.forceUpdate();
-    this.handleSnackbarOpen();
+      fetch(`http://localhost:3000/doc/${this.state.id}/share`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': global.token
+        },
+        body: JSON.stringify({
+            emails: this.state.emailsToAdd
+        })
+      })
+      .then(res => res.json())
+      .then((result) => {
+          this.handleDialogClose();
+          this.handleDrawerClose();
+          this.forceUpdate();
+          this.handleSnackbarOpen();
+      })
+      .catch((error) => {
+          console.log("Error: ", error)
+      })
   }
 
   remove = (email) => {
@@ -262,11 +274,10 @@ class TextEditor extends React.Component {
             </AppBar>
             <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
               <MenuItem style={styles.alternateFormat} onClick={this.home}>Home</MenuItem>
-              <MenuItem onClick={this.handleDialogOpen}>Share</MenuItem>
-              <MenuItem menuItems={this.state.collaborators.map(person => {
-                return <MenuItem disabled={true} style={{color: 'black'}}>{person}</MenuItem>
-              }).concat([<MenuItem>Close</MenuItem>])}>Collaborators</MenuItem>
-              <MenuItem onClick={this.handleDrawerClose}>Close</MenuItem>
+              <MenuItem onClick={this.handleDialogOpen} style={{marginTop: '15px'}}>Share</MenuItem>
+              <MenuItem style={{marginTop: '15px'}} menuItems={this.state.collaborators.map(person => {
+                return <MenuItem>{person}</MenuItem>
+              })}>Collaborators</MenuItem>
               <br />
               <MenuItem onClick={this.handleLogOut} style={{backgroundColor: '#f00', color: '#fff'}}>Logout</MenuItem>
             </Drawer>
