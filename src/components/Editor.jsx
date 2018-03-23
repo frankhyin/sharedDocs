@@ -37,13 +37,16 @@ class TextEditor extends React.Component {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
-      title: 'Untitled',
+      title: this.props.title,
+      author: this.props.author,
       drawerOpen: false,
       snackbarOpen: false,
+      snackbarMessage: '',
       dialogOpen: false,
       error: '',
       email: '',
       emailsToAdd: [],
+      collaborators: this.props.collaborators,
     };
     this.onChange = (editorState) => {
       this.setState({ editorState });
@@ -93,7 +96,16 @@ class TextEditor extends React.Component {
   }
 
   addCollaborators = () => {
-
+    const newCollaborators = [...this.state.collaborators, this.state.emailsToAdd];
+    this.setState({
+      collaborators: newCollaborators,
+      snackbarMessage: 'Added users',
+      emailsToAdd: []
+    }, () => {})
+    this.handleDialogClose();
+    this.handleDrawerClose();
+    this.forceUpdate();
+    this.handleSnackbarOpen();
   }
 
   remove = (email) => {
@@ -148,7 +160,8 @@ class TextEditor extends React.Component {
           const prev = this.state.title;
           this.setState({
             title: this.h1.innerText,
-          })
+            snackbarMessage: 'Title changed'
+          }, () => {})
           this.handleSnackbarOpen();
         } else if (e.key === 'Escape') {
           e.preventDefault();
@@ -169,8 +182,6 @@ class TextEditor extends React.Component {
   }
 
   render() {
-    const oldTitle = this.state.prevTitle;
-    const newTitle = this.state.title;
     return (
       <div>
         <MuiThemeProvider>
@@ -188,8 +199,8 @@ class TextEditor extends React.Component {
             <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
               <MenuItem style={styles.alternateFormat}>Home</MenuItem>
               <MenuItem onClick={this.handleDialogOpen}>Share</MenuItem>
-              <MenuItem menuItems={this.props.collaborators.map(person => {
-                return <MenuItem disabled={true} style={{color: 'black'}}>{person.name}</MenuItem>
+              <MenuItem menuItems={this.state.collaborators.map(person => {
+                return <MenuItem disabled={true} style={{color: 'black'}}>{person}</MenuItem>
               }).concat([<MenuItem>Close</MenuItem>])}>Collaborators</MenuItem>
               <MenuItem onClick={this.handleDrawerClose}>Close</MenuItem>
             </Drawer>
@@ -223,7 +234,7 @@ class TextEditor extends React.Component {
             </Dialog>
             <Snackbar
               open={this.state.snackbarOpen}
-              message="Title changed!"
+              message={this.state.snackbarMessage}
               autoHideDuration={3000}
               onRequestClose={this.handleRequestClose}
             />
