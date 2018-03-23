@@ -103,7 +103,7 @@ class Home extends React.Component {
       .then((result) => {
           console.log(result);
           // alert("Success!");
-          this.handleClose();
+          this.handleClose();n
           this.handleDocumentOpen(result.doc._id);
       })
       .catch((error) => {
@@ -231,7 +231,7 @@ class Home extends React.Component {
                      <Card key={document._id} style={card}>
                       <CardHeader
                           titleStyle={{ fontSize: '25px'}}
-                          subtitle={`Author: ${document.author}`}
+                          subtitle={`Author: ${document.author.displayName} (${document.author.email})`}
                           title={document.title}
                           disabled={true}
                           avatar={

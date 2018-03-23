@@ -20,6 +20,8 @@ import SaveIcon from 'material-ui/svg-icons/content/save';
 import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
 
+// import io from 'socket.io'
+
 const styles = {
   alternateFormat: {
     color: '#fff',
@@ -379,5 +381,10 @@ class colorPicker extends React.Component {
     );
   }
 }
+
+
+
+
+
 
 export default TextEditor;
