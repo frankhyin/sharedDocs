@@ -47,7 +47,7 @@ class TextEditor extends React.Component {
       error: '',
       email: '',
       emailsToAdd: [],
-      collaborators: ['None'],
+      collaborators: [''],
     };
     this.onChange = (editorState) => {
       this.setState({ editorState });
@@ -244,7 +244,7 @@ class TextEditor extends React.Component {
       }
     })
   }
-
+ 
   render() {
     return (
       <div>
