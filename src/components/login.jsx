@@ -116,7 +116,7 @@ class Login extends React.Component {
                       <MenuItem onClick={() => this.props.history.push('/register')} style={{marginTop: '15px'}}>Go to Register</MenuItem>
                     </Drawer>
                   <div style={center}>
-                    <div style={{marginTop: -40}}>
+                    <div style={{marginTop: -40, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                       <div>
                           <TextField
                                hintText="Enter your Email address"

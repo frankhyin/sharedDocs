@@ -203,7 +203,7 @@ class Home extends React.Component {
           margin: 40,
           overflow: 'hidden'
       }
-
+      console.log(this.state.documents)
       return (
           <div style={{maxHeight: '100%'}}>
               <MuiThemeProvider>
@@ -246,10 +246,11 @@ class Home extends React.Component {
                         {/* <Subheader>{document.title}</Subheader> */}
                         {this.state.documents.map((document) =>
                           // <GridTile key={document._id} title={document.title}>
+
                             <Card key={document._id} style={card}>
                               <CardHeader
                                 titleStyle={{ fontSize: '25px'}}
-                                subtitle={`Author: ${document.author}`}
+                                subtitle={`Author: ${document.author.displayName} (${document.author.email})`}
                                 title={document.title}
                                 disabled={true}
                                 avatar={
@@ -259,7 +260,7 @@ class Home extends React.Component {
                                 showExpandableButton={true}
                               />
                               <CardText expandable={true}>
-                                Collaborators: {document.collaborators.join(', ')}
+                                <strong>Collaborators:</strong> {document.collaborators.map(person => `${person.displayName} (${person.email})`).join(', ')}
                               </CardText>
                               <CardActions>
                                 <RaisedButton primary={true} label="Open" onClick={() => this.handleDocumentOpen(document._id)}/>
