@@ -20,7 +20,7 @@ export default class App extends React.Component {
                 <Route exact path="/editor" component={Editor}/>
             </Switch>
         </HashRouter>
-        {/* <TextEditor title={'Untitled'} author={'Matt'} id={1} collaborators={collaborators} /> */}
+        {/* <Editor title={'Untitled'} author={'Matt'} id={1} collaborators={collaborators} /> */}
       </div>
     );
   }

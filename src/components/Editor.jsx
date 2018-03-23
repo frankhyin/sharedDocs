@@ -1,6 +1,6 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import InlineEdit from 'react-edit-inline';
 import { Editor } from 'react-draft-wysiwyg';
 import { CompactPicker } from 'react-color';
@@ -37,8 +37,9 @@ class TextEditor extends React.Component {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
-      title: this.props.title,
-      author: this.props.author,
+      id: this.props.location.state.docId,
+      title: '',
+      author: 'N/A',
       drawerOpen: false,
       snackbarOpen: false,
       snackbarMessage: '',
@@ -117,32 +118,73 @@ class TextEditor extends React.Component {
   save = (e) => {
     e.preventDefault();
     const contentState = convertToRaw(this.state.editorState.getCurrentContent());
-    console.log(this.props.id)
-    console.log(this.state.title)
-    console.log(contentState)
+    const content = JSON.stringify(contentState);
     event.preventDefault();
-    fetch('http://localhost:3000/document/:id', {
+    fetch(`http://localhost:3000/doc/${this.state.id}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': global.token
       },
       body: JSON.stringify({
           title: this.state.title,
-          content: contentState,
+          content: content,
       })
     })
     .then(res => res.json())
     .then((result) => {
-        console.log(result);
-        alert("Success!");
+        this.setState({snackbarMessage: 'Saved!'}, () => this.handleSnackbarOpen())
     })
     .catch((error) => {
         console.log("Error: ", error)
     })
   }
 
+  handleLogOut = () => {
+    fetch('http://localhost:3000/logout', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': global.token
+      }
+    })
+    .then(res => res.json())
+    .then((result) => {
+      if (result.success) {
+        this.props.history.push('/login');
+      }
+    })
+    .catch((error) => {
+      console.log("Error: ", error)
+    })
+  }
+
   componentDidMount() {
+    // const contentState = convertToRaw(this.state.editorState.getCurrentContent());
+    // const content = JSON.stringify(contentState);
+    event.preventDefault();
+    fetch(`http://localhost:3000/doc/${this.state.id}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': global.token
+      },
+    })
+    .then(res => res.json())
+    .then((result) => {
+        let raw = result.doc.content ? JSON.parse(result.doc.content)
+          : EditorState.createEmpty();
+        this.setState({
+          title: result.doc.title,
+          editorState: EditorState.createWithContent(convertFromRaw(raw))
+        })
+    })
+    .catch((error) => {
+        console.log("Error: ", error)
+    })
     this.h1 = findDOMNode(this.refs.AppBar).children[1];
     this.h1.addEventListener('click', e => {
       if (!this.editingh1) {
@@ -199,10 +241,12 @@ class TextEditor extends React.Component {
             <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
               <MenuItem style={styles.alternateFormat}>Home</MenuItem>
               <MenuItem onClick={this.handleDialogOpen}>Share</MenuItem>
-              <MenuItem menuItems={this.state.collaborators.map(person => {
+              {/* <MenuItem menuItems={this.state.collaborators.map(person => {
                 return <MenuItem disabled={true} style={{color: 'black'}}>{person}</MenuItem>
-              }).concat([<MenuItem>Close</MenuItem>])}>Collaborators</MenuItem>
+              }).concat([<MenuItem>Close</MenuItem>])}>Collaborators</MenuItem> */}
               <MenuItem onClick={this.handleDrawerClose}>Close</MenuItem>
+              <br />
+              <MenuItem onClick={this.handleLogOut} style={{backgroundColor: '#f00', color: '#fff'}}>Logout</MenuItem>
             </Drawer>
             <Dialog
               title="Share"
