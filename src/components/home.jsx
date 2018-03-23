@@ -33,6 +33,7 @@ class Home extends React.Component {
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this)
     this.handleDrawerClose = this.handleDrawerClose.bind(this)
     this.handleNewDoc = this.handleNewDoc.bind(this)
+    this.handleDocumentOpen = this.handleDocumentOpen.bind(this)
   }
 
   handleOpen() {
@@ -99,6 +100,13 @@ class Home extends React.Component {
       .catch((error) => {
           console.log("Error: ", error)
       })
+  }
+
+  handleDocumentOpen(docId){
+    this.props.history.push({
+      pathname: '/editor',
+      state: {docId}
+    });
   }
 
   componentDidMount(){
@@ -190,7 +198,7 @@ class Home extends React.Component {
                   {this.state.documents.map((document) => <Card>
                       <CardHeader title={document.title}/>
                       <CardActions>
-                        <FlatButton label="Open" />
+                        <FlatButton label="Open" onClick={() => this.handleDocumentOpen(document._id)}/>
                         <FlatButton label="Delete" />
                       </CardActions>
                     </Card>
