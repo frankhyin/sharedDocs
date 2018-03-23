@@ -216,6 +216,7 @@ class TextEditor extends React.Component {
     .then(res => res.json())
     .then((result) => {
         let raw = result.doc.content ? JSON.parse(result.doc.content) : null;
+        console.log('result: ', result)
         this.setState({
           title: result.doc.title,
           editorState: raw ? EditorState.createWithContent(convertFromRaw(raw)) : EditorState.createEmpty(),
@@ -265,7 +266,7 @@ class TextEditor extends React.Component {
       }
     })
   }
- 
+
   render() {
     return (
       <div>
@@ -285,7 +286,7 @@ class TextEditor extends React.Component {
               <MenuItem style={styles.alternateFormat} onClick={this.home}>Home</MenuItem>
               <MenuItem onClick={this.handleDialogOpen} style={{marginTop: '15px'}}>Share</MenuItem>
               <MenuItem style={{marginTop: '15px'}} menuItems={this.state.collaborators.map(person => {
-                return <MenuItem key={person}>{person}</MenuItem>
+                return <MenuItem key={person._id} disabled={true} style={{color: 'black'}}>{person.displayName}</MenuItem>
               })}>Collaborators</MenuItem>
               <br />
               <MenuItem onClick={this.handleLogOut} style={{backgroundColor: '#f00', color: '#fff'}}>Logout</MenuItem>
