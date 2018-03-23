@@ -11,6 +11,9 @@ import {Card, CardHeader, CardActions, CardText} from 'material-ui/Card';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import EditorInsertDriveFile from 'material-ui/svg-icons/editor/insert-drive-file';
+import Avatar from 'material-ui/Avatar';
+import ReactDOM from 'react-dom';
 // import Divider from 'material-ui/Divider';
 // import Paper from 'material-ui/Paper';
 import { withRouter } from 'react-router';
@@ -33,6 +36,7 @@ class Home extends React.Component {
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this)
     this.handleDrawerClose = this.handleDrawerClose.bind(this)
     this.handleNewDoc = this.handleNewDoc.bind(this)
+    this.handleSelectAll = this.handleSelectAll.bind(this)
     this.handleDocumentOpen = this.handleDocumentOpen.bind(this)
   }
 
@@ -50,6 +54,11 @@ class Home extends React.Component {
 
   handleDrawerClose() {
     this.setState({drawerOpen: false})
+  }
+
+  handleSelectAll() { //select the Untitled title when clicking on it.
+      this.input = ReactDOM.findDOMNode(this.refs.input).getElementsByTagName('input')[0]
+      this.input.select();
   }
 
   handleLogOut() {
@@ -137,6 +146,7 @@ class Home extends React.Component {
           <FlatButton
             label="Cancel"
             onClick={this.handleClose}
+            style={{marginRight: '10px'}}
           />,
           <RaisedButton
             label="Submit"
@@ -148,17 +158,21 @@ class Home extends React.Component {
       const appBar = {
           display: 'flex',
           alignItems: 'center',
-      }
+      };
       const style = {
           marginLeft: 20,
       };
+      const card = {
+          margin: 40
+      }
+
       return (
           <div>
               <MuiThemeProvider>
                   <div>
                   <AppBar
                       style={appBar}
-                      title={`Welcome, ${global.displayName}.`}
+                      title={`Welcome, ${global.displayName}`}
                       onLeftIconButtonClick={this.handleDrawerOpen}
                       >
                       <div>
@@ -178,35 +192,40 @@ class Home extends React.Component {
                                    hintText="Give your Document a title"
                                    floatingLabelText="Document"
                                    onChange={(e) => this.handleTitleChange(e)}
-                                   // value={this.state.titleInput}
+                                   value={this.state.titleInput}
+                                   onClick={this.handleSelectAll}
+                                   ref="input"
                                    // errorText={this.state.emailError}
                                />
                             </Dialog>
                       </div>
                   </AppBar>
                   <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
-                    <MenuItem onClick={this.handleLogOut}>Log Out</MenuItem>
+                    <MenuItem onClick={this.handleLogOut} style={{marginTop: '15px'}}>Log Out</MenuItem>
                   </Drawer>
-                  {/* <Card>
-                    <CardHeader title="Title" subtitle="By Author"/>
-                    <CardActions>
-                      <FlatButton label="Open" />
-                      <FlatButton label="Delete" />
-                    </CardActions>
-                  </Card> */}
 
-                  {this.state.documents.map((document) => <Card>
-                      <CardHeader title={document.title}/>
+                  {this.state.documents.map((document) =>
+                     <Card key={document._id} style={card}>
+                      <CardHeader
+                          titleStyle={{ fontSize: '25px'}}
+                          subtitle={`Author: ${document.author}`}
+                          title={document.title}
+                          disabled={true}
+                          avatar={
+                            <Avatar icon={<EditorInsertDriveFile />} />
+                          }
+                          actAsExpander={true}
+                          showExpandableButton={true}
+                      />
+                      <CardText expandable={true}>
+                          Collaborators: {document.collaborators}
+                      </CardText>
                       <CardActions>
-                        <FlatButton label="Open" onClick={() => this.handleDocumentOpen(document._id)}/>
-                        <FlatButton label="Delete" />
+                        <RaisedButton primary={true} label="Open" onClick={() => this.handleDocumentOpen(document._id)}/>
+                        <FlatButton label="Delete" style={{marginLeft: '15px'}}/>
                       </CardActions>
                     </Card>
                   )}
-
-                  {console.log(this.state.documents)}
-
-
                   </div>
               </MuiThemeProvider>
           </div>

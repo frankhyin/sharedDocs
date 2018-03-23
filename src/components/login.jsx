@@ -102,7 +102,7 @@ class Login extends React.Component {
                         onLeftIconButtonClick={this.handleDrawerOpen}
                     />
                     <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
-                      <MenuItem onClick={() => this.props.history.push('/register')}>Go to Register</MenuItem>
+                      <MenuItem onClick={() => this.props.history.push('/register')} style={{marginTop: '15px'}}>Go to Register</MenuItem>
                     </Drawer>
                   <div style={center}>
                       <div style={{margin: '190px'}}/>
