@@ -11,6 +11,7 @@ import ContentClear from 'material-ui/svg-icons/content/clear';
 import Dialog from 'material-ui/Dialog';
 import Drawer from 'material-ui/Drawer';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import IconButton from 'material-ui/IconButton';
 import {List, ListItem} from 'material-ui/List';
@@ -19,12 +20,20 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SaveIcon from 'material-ui/svg-icons/content/save';
 import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 const styles = {
   alternateFormat: {
     color: '#fff',
     backgroundColor: 'rgb(0, 188, 212)',
-    marginTop: '15px'
+    marginTop: '15px',
+  },
+  submitButton: {
+      color: '#fff',
+      backgroundColor: 'rgb(0, 188, 212)',
+      marginTop: '15px',
+      float: 'right'
   }
 }
 
@@ -276,7 +285,7 @@ class TextEditor extends React.Component {
               <MenuItem style={styles.alternateFormat} onClick={this.home}>Home</MenuItem>
               <MenuItem onClick={this.handleDialogOpen} style={{marginTop: '15px'}}>Share</MenuItem>
               <MenuItem style={{marginTop: '15px'}} menuItems={this.state.collaborators.map(person => {
-                return <MenuItem>{person}</MenuItem>
+                return <MenuItem key={person}>{person}</MenuItem>
               })}>Collaborators</MenuItem>
               <br />
               <MenuItem onClick={this.handleLogOut} style={{backgroundColor: '#f00', color: '#fff'}}>Logout</MenuItem>
@@ -306,8 +315,11 @@ class TextEditor extends React.Component {
                 value={this.state.email}
                 errorText={this.state.error}
               />
-              <FlatButton label="Add" type="submit" primary={true} onClick={this.addEmail} />
-              <FlatButton label="Submit" type="submit" onClick={this.addCollaborators} style={styles.alternateFormat} />
+              <FloatingActionButton mini={true} label="Add" type="submit" primary={false} onClick={this.addEmail} style={{marginRight: '15px', marginLeft: '15px'}}>
+                  <ContentAdd />
+              </FloatingActionButton>
+              <br/>
+              <RaisedButton label="Share" type="submit" onClick={this.addCollaborators} style={styles.submitButton} primary={true}/>
             </Dialog>
             <Snackbar
               open={this.state.snackbarOpen}
