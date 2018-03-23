@@ -104,7 +104,7 @@ class Home extends React.Component {
           console.log(result);
           // alert("Success!");
           this.handleClose();
-          this.props.history.push('/editor');
+          this.handleDocumentOpen(result.doc._id);
       })
       .catch((error) => {
           console.log("Error: ", error)

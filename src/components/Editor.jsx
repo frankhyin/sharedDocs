@@ -184,7 +184,6 @@ class TextEditor extends React.Component {
   componentDidMount() {
     // const contentState = convertToRaw(this.state.editorState.getCurrentContent());
     // const content = JSON.stringify(contentState);
-    event.preventDefault();
     fetch(`http://localhost:3000/doc/${this.state.id}`, {
       method: 'GET',
       headers: {
@@ -195,13 +194,11 @@ class TextEditor extends React.Component {
     })
     .then(res => res.json())
     .then((result) => {
-        let raw = result.doc.content ? JSON.parse(result.doc.content)
-          : EditorState.createEmpty();
-        console.log(result)
+        let raw = result.doc.content ? JSON.parse(result.doc.content) : null;
         this.setState({
           title: result.doc.title,
-          editorState: EditorState.createWithContent(convertFromRaw(raw)),
-          collaborators: result.doc.collaborators
+          editorState: raw ? EditorState.createWithContent(convertFromRaw(raw)) : EditorState.createEmpty(),
+          collaborators: result.doc.collaborators,
         })
     })
     .catch((error) => {
