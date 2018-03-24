@@ -239,7 +239,7 @@ class Home extends React.Component {
                         </div>
                     </AppBar>
                     <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
-                      <MenuItem onClick={this.handleLogOut} style={{backgroundColor: '#f00', color: '#fff'}}>Log Out</MenuItem>
+                      <MenuItem onClick={this.handleLogOut} style={{backgroundColor: '#f00', color: '#fff', marginTop: '15px'}}>Log Out</MenuItem>
                     </Drawer>
                     <div style={{'flex': 1, overflow: 'auto'}}>
                       {/* <GridList cellHeight='auto' cols={1} style={{flexGrow: 1, overflowY: 'auto'}}> */}

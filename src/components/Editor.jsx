@@ -60,6 +60,7 @@ class TextEditor extends React.Component {
       collaborators: [''],
     };
     this.onChange = (editorState) => {
+        console.log("Change")
       this.setState({ editorState });
     };
   }
@@ -103,7 +104,6 @@ class TextEditor extends React.Component {
     } else {
       this.setState({error: 'Invalid email'})
     }
-    this.forceUpdate()
   }
 
   addCollaborators = () => {
@@ -124,6 +124,10 @@ class TextEditor extends React.Component {
           this.handleDrawerClose();
           this.forceUpdate();
           this.handleSnackbarOpen();
+          this.setState({
+            collaborators: this.state.collaborators.concat(this.state.emailsToAdd),
+            emailsToAdd: [],
+          })
       })
       .catch((error) => {
           console.log("Error: ", error)
@@ -194,6 +198,7 @@ class TextEditor extends React.Component {
     .then(res => res.json())
     .then((result) => {
       if (result.success) {
+        window.localStorage.removeItem('token')
         this.props.history.push('/login');
       }
     })
@@ -320,7 +325,7 @@ class TextEditor extends React.Component {
                   <ContentAdd />
               </FloatingActionButton>
               <br/>
-              <RaisedButton label="Share" type="submit" onClick={this.addCollaborators} style={styles.submitButton} primary={true}/>
+              <RaisedButton label="Share" type="submit" onClick={this.addCollaborators} style={styles.submitButton} primary={true} disabled={this.state.emailsToAdd.length === 0}/>
             </Dialog>
             <Snackbar
               open={this.state.snackbarOpen}
