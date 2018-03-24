@@ -17,6 +17,9 @@ import ReactDOM from 'react-dom';
 // import Divider from 'material-ui/Divider';
 // import Paper from 'material-ui/Paper';
 import { withRouter } from 'react-router';
+import {GridList, GridTile} from 'material-ui/GridList';
+import Subheader from 'material-ui/Subheader';
+
 
 const jwt = require('jsonwebtoken');
 
@@ -73,6 +76,7 @@ class Home extends React.Component {
       .then(res => res.json())
       .then((result) => {
           if (result.success) {
+              window.localStorage.removeItem('token');
               this.props.history.push('/login');
           }
       })
@@ -111,29 +115,32 @@ class Home extends React.Component {
       })
   }
 
-  // deleteDoc = (docId) => {
-  //   fetch('http://localhost:3000/doc/:id', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json',
-  //       'Authorization': global.token
-  //     },
-  //     body: JSON.stringify({
-  //         id: docId,
-  //     })
-  //     .then(res => res.json())
-  //     .then(result => {
-  //       result.findByIdAndRemove(docId)
-  //     })
-  //     .then(
-  //       const newDocs =
-  //       this.setState({
-  //         documents:
-  //       })
-  //     )
-  //   })
-  // }
+  deleteDoc = (docId) => {
+    console.log('id: ', docId)
+    fetch('http://localhost:3000/doc/:id', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': global.token
+      },
+      body: JSON.stringify({
+          id: docId,
+      })
+      .then(res => res.json())
+      .then(result => {
+        result.findByIdAndRemove(docId)
+      })
+      .then(() => {
+        console.log(this.state.documents)
+        // const index = this.state.documents.indexOf(docId)
+        // const newDocs = this.state.documents.splice(index, 1)
+        // this.setState({
+        //   documents: newDocs,
+        // }, () => {console.log('deleted')})
+      })
+    })
+  }
 
   handleDocumentOpen(docId){
     this.props.history.push({
@@ -143,6 +150,10 @@ class Home extends React.Component {
   }
 
   componentDidMount(){
+    if (!global.token) {
+      this.props.history.push('/login');
+      return;
+    }
     fetch('http://localhost:3000/home', {
           method: 'GET',
           headers: {
@@ -182,17 +193,21 @@ class Home extends React.Component {
       const appBar = {
           display: 'flex',
           alignItems: 'center',
+          position: 'sticky',
+          top: 0,
       };
       const style = {
           marginLeft: 20,
       };
       const card = {
-          margin: 40
+          margin: 40,
+          overflow: 'hidden'
       }
-
+      console.log(this.state.documents)
       return (
-          <div>
+          <div style={{maxHeight: '100%'}}>
               <MuiThemeProvider>
+<<<<<<< HEAD
                   <div>
                   <AppBar
                       style={appBar}
@@ -249,6 +264,73 @@ class Home extends React.Component {
                       </CardActions>
                     </Card>
                   )}
+=======
+                  <div style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
+                    <AppBar
+                        style={appBar}
+                        title={`Welcome, ${global.displayName}`}
+                        onLeftIconButtonClick={this.handleDrawerOpen}
+                        >
+                        <div>
+                          <IconButton tooltip="New Document"
+                              label="Dialog"
+                              onClick={this.handleOpen}
+                              >
+                            <ContentAdd color='#fff' />
+                          </IconButton>
+                              <Dialog
+                                title="Create a new Document"
+                                actions={actions}
+                                modal={false}
+                                open={this.state.open}
+                                onRequestClose={this.handleClose}>
+                                <TextField
+                                     hintText="Give your Document a title"
+                                     floatingLabelText="Document Title"
+                                     onChange={(e) => this.handleTitleChange(e)}
+                                     value={this.state.titleInput}
+                                     onClick={this.handleSelectAll}
+                                     ref="input"
+                                     // errorText={this.state.emailError}
+                                 />
+                              </Dialog>
+                        </div>
+                    </AppBar>
+                    <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
+                      <MenuItem onClick={this.handleLogOut} style={{backgroundColor: '#f00', color: '#fff'}}>Log Out</MenuItem>
+                    </Drawer>
+                    <div style={{'flex': 1, overflow: 'auto'}}>
+                      {/* <GridList cellHeight='auto' cols={1} style={{flexGrow: 1, overflowY: 'auto'}}> */}
+                        {/* <Subheader>{document.title}</Subheader> */}
+                        {this.state.documents.map((document) =>
+                          // <GridTile key={document._id} title={document.title}>
+
+                            <Card key={document._id} style={card}>
+                              <CardHeader
+                                titleStyle={{ fontSize: '25px'}}
+                                subtitle={`Author: ${document.author.displayName} (${document.author.email})`}
+                                title={document.title}
+                                disabled={true}
+                                avatar={
+                                  <Avatar icon={<EditorInsertDriveFile />} />
+                                }
+                                actAsExpander={true}
+                                showExpandableButton={true}
+                              />
+                              <CardText expandable={true}>
+                                <strong>Collaborators:</strong> {document.collaborators.map(person => `${person.displayName} (${person.email})`).join(', ')}
+                              </CardText>
+                              <CardActions>
+                                <RaisedButton primary={true} label="Open" onClick={() => this.handleDocumentOpen(document._id)}/>
+                                <FlatButton label="Delete" style={{marginLeft: '15px'}} onClick={this.deleteDoc}/>
+                              </CardActions>
+                            </Card>
+
+                          // </GridTile>
+                        )}
+                      {/* </GridList> */}
+                    </div>
+>>>>>>> 4c90f992a91ede1521e95eb036988fa310f82709
                   </div>
               </MuiThemeProvider>
           </div>

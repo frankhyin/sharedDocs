@@ -7,6 +7,11 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import { withRouter } from 'react-router';
 
+const checkEmail = (email) => {
+  var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return filter.test(email) ? true : false;
+}
+
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -66,6 +71,17 @@ class Register extends React.Component {
         this.setState({password2Error: "Passwords must match"});
         success = false;
     }
+
+    // if (!checkEmail(this.state.emailInput)) {
+    //     this.setState({emailError: "Please enter a valid email"})
+    //     success = false;
+    // }
+    //
+    // if (this.state.passwordInput.length < 6) {
+    //     this.setState({passwordError: "Password must be at least 6 characters"})
+    //     success = false;
+    // }
+
     if (success) {
         fetch('http://localhost:3000/register', {
           method: 'POST',
@@ -115,14 +131,18 @@ class Register extends React.Component {
   }
 
   render() {
-      const center = {
-          textAlign: 'center',
-      }
+    const center = {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 
     return (
       <div>
           <MuiThemeProvider>
-              <form onSubmit={(e) => this.handleSubmit(e)}>
+              <form onSubmit={(e) => this.handleSubmit(e)} style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
                   <AppBar
                       title="Register"
                       onLeftIconButtonClick={this.handleDrawerOpen}
@@ -131,7 +151,7 @@ class Register extends React.Component {
                     <MenuItem onClick={() => this.props.history.push('/Login')} style={{marginTop: '15px'}}>Go to Login</MenuItem>
                   </Drawer>
                 <div style={center}>
-                    <div style={{margin: '100px'}}/>
+                    <div style={{margin: -40}}/>
                     <div>
                         <TextField
                              hintText="Enter your Email address"
