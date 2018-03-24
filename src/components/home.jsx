@@ -207,64 +207,6 @@ class Home extends React.Component {
       return (
           <div style={{maxHeight: '100%'}}>
               <MuiThemeProvider>
-<<<<<<< HEAD
-                  <div>
-                  <AppBar
-                      style={appBar}
-                      title={`Welcome, ${global.displayName}`}
-                      onLeftIconButtonClick={this.handleDrawerOpen}
-                      >
-                      <div>
-                        <IconButton tooltip="New Document"
-                            label="Dialog"
-                            onClick={this.handleOpen}
-                            >
-                          <ContentAdd color='#fff' />
-                        </IconButton>
-                            <Dialog
-                              title="Create a new Document"
-                              actions={actions}
-                              modal={false}
-                              open={this.state.open}
-                              onRequestClose={this.handleClose}>
-                              <TextField
-                                   hintText="Give your Document a title"
-                                   floatingLabelText="Document Title"
-                                   onChange={(e) => this.handleTitleChange(e)}
-                                   value={this.state.titleInput}
-                                   onClick={this.handleSelectAll}
-                                   ref="input"
-                                   // errorText={this.state.emailError}
-                               />
-                            </Dialog>
-                      </div>
-                  </AppBar>
-                  <Drawer docked={false} width={200} open={this.state.drawerOpen} onRequestChange={ (drawerOpen) => this.setState({drawerOpen})}>
-                    <MenuItem onClick={this.handleLogOut} style={{backgroundColor: '#f00', color: '#fff'}}>Log Out</MenuItem>
-                  </Drawer>
-                  {this.state.documents.map((document) =>
-                     <Card key={document._id} style={card}>
-                      <CardHeader
-                          titleStyle={{ fontSize: '25px'}}
-                          subtitle={`Author: ${document.author.displayName} (${document.author.email})`}
-                          title={document.title}
-                          disabled={true}
-                          avatar={
-                            <Avatar icon={<EditorInsertDriveFile />} />
-                          }
-                          actAsExpander={true}
-                          showExpandableButton={true}
-                      />
-                      <CardText expandable={true}>
-                          Collaborators: {document.collaborators}
-                      </CardText>
-                      <CardActions>
-                        <RaisedButton primary={true} label="Open" onClick={() => this.handleDocumentOpen(document._id)}/>
-                        <FlatButton label="Delete" style={{marginLeft: '15px'}} onClick={this.deleteDoc}/>
-                      </CardActions>
-                    </Card>
-                  )}
-=======
                   <div style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
                     <AppBar
                         style={appBar}
@@ -330,7 +272,6 @@ class Home extends React.Component {
                         )}
                       {/* </GridList> */}
                     </div>
->>>>>>> 4c90f992a91ede1521e95eb036988fa310f82709
                   </div>
               </MuiThemeProvider>
           </div>
