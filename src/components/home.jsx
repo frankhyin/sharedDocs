@@ -105,40 +105,37 @@ class Home extends React.Component {
       })
       .then(res => res.json())
       .then((result) => {
-          console.log(result);
-          // alert("Success!");
-          this.handleClose();n
+          const newDocuments = [...this.state.documents];
+          newDocuments.push(result.doc);
+          this.setState({
+              documents: newDocuments
+          })
+          this.handleClose();
           this.handleDocumentOpen(result.doc._id);
+
       })
       .catch((error) => {
           console.log("Error: ", error)
       })
   }
 
-  deleteDoc = (docId) => {
+  deleteDoc = (docId, i) => {
     console.log('id: ', docId)
-    fetch('http://localhost:3000/doc/:id', {
-      method: 'POST',
+    fetch(`http://localhost:3000/doc/${docId}`, {
+      method: 'DELETE',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': global.token
-      },
-      body: JSON.stringify({
-          id: docId,
-      })
-      .then(res => res.json())
-      .then(result => {
-        result.findByIdAndRemove(docId)
-      })
-      .then(() => {
-        console.log(this.state.documents)
-        // const index = this.state.documents.indexOf(docId)
-        // const newDocs = this.state.documents.splice(index, 1)
-        // this.setState({
-        //   documents: newDocs,
-        // }, () => {console.log('deleted')})
-      })
+      }
+    })
+    .then((result) => {
+        console.log(result);
+        const newDocuments = [...this.state.documents]
+        newDocuments.splice(i, 1);
+        this.setState({
+            documents: newDocuments
+        })
     })
   }
 
@@ -244,7 +241,7 @@ class Home extends React.Component {
                     <div style={{'flex': 1, overflow: 'auto'}}>
                       {/* <GridList cellHeight='auto' cols={1} style={{flexGrow: 1, overflowY: 'auto'}}> */}
                         {/* <Subheader>{document.title}</Subheader> */}
-                        {this.state.documents.map((document) =>
+                        {this.state.documents.map((document, i) =>
                           // <GridTile key={document._id} title={document.title}>
 
                             <Card key={document._id} style={card}>
@@ -264,7 +261,12 @@ class Home extends React.Component {
                               </CardText>
                               <CardActions>
                                 <RaisedButton primary={true} label="Open" onClick={() => this.handleDocumentOpen(document._id)}/>
-                                <FlatButton label="Delete" style={{marginLeft: '15px'}} onClick={this.deleteDoc}/>
+                                <FlatButton
+                                    label="Delete"
+                                    style={{marginLeft: '15px'}}
+                                    onClick={() => this.deleteDoc(document._id, i)}
+                                    disabled={global.displayName !== document.author.displayName}
+                                />
                               </CardActions>
                             </Card>
 
