@@ -23,6 +23,11 @@ import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
+
+// Socket.IO stuff
+import openSocket from 'socket.io-client';
+const socket = openSocket('http://localhost:3000');
+
 const styles = {
   alternateFormat: {
     color: '#fff',
@@ -45,8 +50,9 @@ const checkEmail = (email) => {
 class TextEditor extends React.Component {
   constructor(props) {
     super(props);
+    const editorState = EditorState.createEmpty();
     this.state = {
-      editorState: EditorState.createEmpty(),
+      editorState,
       id: this.props.location.state.docId,
       title: '',
       author: 'N/A',
@@ -221,12 +227,18 @@ class TextEditor extends React.Component {
     .then(res => res.json())
     .then((result) => {
         let raw = result.doc.content ? JSON.parse(result.doc.content) : null;
-        console.log('result: ', result)
+
+        let collaborators = result.doc.collaborators.map(user => `${user.displayName} (${user.email})`);
+        this.settingState = true
         this.setState({
           title: result.doc.title,
           editorState: raw ? EditorState.createWithContent(convertFromRaw(raw)) : EditorState.createEmpty(),
-          collaborators: result.doc.collaborators,
+          collaborators: collaborators
+        }, () => {
+          this.settingState = false
         })
+
+        this.setUpSocket();
     })
     .catch((error) => {
         console.log("Error: ", error)
@@ -270,6 +282,29 @@ class TextEditor extends React.Component {
         this.editingh1 = '';
       }
     })
+  }
+
+  onChange = (editorState) => {
+    this.setState({ editorState });
+    if (this.state.editorState.getCurrentContent() !== editorState.getCurrentContent()) socket.emit('sendToServer', JSON.stringify(convertToRaw(editorState.getCurrentContent())));
+  }
+  socketHandler = (raw) => {
+    // console.log("raw", raw);
+    console.log('sendToClient')
+    let content = convertFromRaw(JSON.parse(raw));
+    const currentSelection = this.state.editorState.getSelection()
+    let editorState = EditorState.createWithContent(content)
+    editorState = EditorState.forceSelection(editorState, currentSelection)
+    this.settingState = true
+    this.setState({
+      editorState,
+    });
+  }
+  setUpSocket = () => {
+    socket.on('sendToClient', this.socketHandler);
+  }
+  componentWillUnmount() {
+    socket.removeListener('sendToClient', this.socketHandler)
   }
 
   render() {
@@ -397,5 +432,10 @@ class colorPicker extends React.Component {
     );
   }
 }
+
+
+
+
+
 
 export default TextEditor;
